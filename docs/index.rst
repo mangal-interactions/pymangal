@@ -11,7 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+.. automodule:: pymangal
 
+.. autoclass:: mangal
+   :members:
 
 Indices and tables
 ==================
