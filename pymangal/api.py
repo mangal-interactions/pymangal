@@ -2,17 +2,18 @@ import json
 import requests as re
 
 class mangal:
-    """
-    This class will handle connection to the API.
+    """This class will handle connection to the API.
 
-    Arguments
-    url : The URL of the api
-    usr : An optional username
-    pwd : An optional password
+    Args:
+        url (str) : The URL of the api
+        usr (str) : An optional username
+        pwd (str) : An optional password
 
     Attributes
     url : The URL of the API + suffix
     resources : A list of the resources
+
+    >>> mg = mangal(url='http://mangal.uqar.ca')
 
     """
 
