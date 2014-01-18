@@ -19,6 +19,9 @@ class api_test(unittest.TestCase):
     def test_minimal_elements_in_resources(self):
         mg = api.mangal()
         assert 'taxa' in mg.resources
+        assert 'dataset' in mg.resources
+        assert 'network' in mg.resources
+        assert 'interaction' in mg.resources
 
 def main():
     unittest.main()
