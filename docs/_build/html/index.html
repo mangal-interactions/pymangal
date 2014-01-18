@@ -56,7 +56,23 @@
 <dt id="pymangal.mangal">
 <em class="property">class </em><tt class="descclassname">pymangal.</tt><tt class="descname">mangal</tt><big>(</big><em>url='http://mangal.uqar.ca'</em>, <em>usr=None</em>, <em>pwd=None</em><big>)</big><a class="headerlink" href="#pymangal.mangal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles connection to the API</p>
-<p>This is the main class used by <tt class="docutils literal"><span class="pre">pymangal</span></tt>.</p>
+<p>This is the main class used by <tt class="docutils literal"><span class="pre">pymangal</span></tt>. When called, it will return
+an object with all methods and attributes required to interact with
+the database.</p>
+<dl class="method">
+<dt id="pymangal.mangal.List">
+<tt class="descname">List</tt><big>(</big><em>resource='dataset'</em>, <em>filters=None</em>, <em>autopage=False</em><big>)</big><a class="headerlink" href="#pymangal.mangal.List" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all objects of a given resource type, according to a filter</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>resource (str): A type of resource available
+filters (str): A string giving the filtering parameters
+autopage (true): Whether to keep on listing until all objects are retrieved</dd>
+<dt>Returns:</dt>
+<dd>objects (array): An array of objects, each being a <tt class="docutils literal"><span class="pre">dict</span></tt></dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>

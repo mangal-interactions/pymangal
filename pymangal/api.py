@@ -40,6 +40,7 @@ class mangal:
                 auth = (usr, pwd)
             else :
                 raise TypeError("Both the password and the username must be strings")
+        self.auth = auth
         # We don't want the URL to end with a trailing slash
         # (if only because it makes things simpler after)
         if url[-1:] == '/':
@@ -65,16 +66,20 @@ class mangal:
             allowed_verbs[resource] = schema_request.json()['allowed_detail_http_methods']
         self.verbs = allowed_verbs
 
-    def List(self, resource='dataset', filters=None):
+    def List(self, resource='dataset', filters=None, autopage=False):
         """ Lists all objects of a given resource type, according to a filter
 
         Args:
             resource (str): A type of resource available
             filters (str): A string giving the filtering parameters
+            autopage (true): Whether to keep on listing until all objects are retrieved
 
         Returns:
             objects (array): An array of objects, each being a ``dict``
         """
+        list_objects = []
+        if not isinstance(autopage, bool):
+            raise TypeError("autopage must be a boolean")
         if not isinstance(resource, str):
             raise TypeError("resource must be a string")
         if not filters == None:
@@ -82,4 +87,17 @@ class mangal:
                 raise TypeError("filters must be a string")
         if not resource in self.resources:
             raise ValueError("This type of resource is not available")
-
+        list_url = self.url + resource
+        list_request = re.get(list_url, auth=self.auth)
+        if list_request.status_code != 200 :
+            raise ValueError("There was an error in listing the objects")
+        list_content = list_request.json()
+        if not list_content.has_key('objects'):
+            raise KeyError('Badly formatted reply')
+        list_objects += list_content['objects']
+        if autopage:
+            while not list_content['meta']['next'] == None :
+                list_request = re.get(self.root + list_content['meta']['next'], auth=self.auth)
+                list_content = list_request.json()
+                list_objects += list_content['objects']
+        return list_objects
