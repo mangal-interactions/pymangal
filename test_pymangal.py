@@ -22,6 +22,10 @@ class api_test(unittest.TestCase):
         assert 'dataset' in mg.resources
         assert 'network' in mg.resources
         assert 'interaction' in mg.resources
+    def test_allowed_verbs(self):
+        mg = api.mangal()
+        for verb in ['get', 'post', 'patch']:
+            assert verb in mg.verbs['taxa']
 
 def main():
     unittest.main()
