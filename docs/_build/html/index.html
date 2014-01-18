@@ -60,6 +60,28 @@
 an object with all methods and attributes required to interact with
 the database.</p>
 <dl class="method">
+<dt id="pymangal.mangal.Get">
+<tt class="descname">Get</tt><big>(</big><em>resource='dataset'</em>, <em>key='1'</em><big>)</big><a class="headerlink" href="#pymangal.mangal.Get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an object identified by its key (id)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>resource</strong> &#8211; The type of object to get</li>
+<li><strong>key</strong> &#8211; The unique identifier of the object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Usage ::
+&gt;&gt;&gt; import pymangal
+&gt;&gt;&gt; mg = pymangal.mangal()
+&gt;&gt;&gt; mg.Get(&#8216;taxa&#8217;, &#8216;1&#8217;)</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymangal.mangal.List">
 <tt class="descname">List</tt><big>(</big><em>resource='dataset'</em>, <em>filters=None</em>, <em>autopage=False</em><big>)</big><a class="headerlink" href="#pymangal.mangal.List" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists all objects of a given resource type, according to a filter</p>

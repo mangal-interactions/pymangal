@@ -101,3 +101,32 @@ class mangal:
                 list_content = list_request.json()
                 list_objects += list_content['objects']
         return list_objects
+
+    def Get(self, resource='dataset', key='1'):
+        """ Get an object identified by its key (id)
+
+        :param resource: The type of object to get
+        :param key: The unique identifier of the object
+
+        Usage ::
+        >>> import pymangal
+        >>> mg = pymangal.mangal()
+        >>> mg.Get('taxa', '1')
+        """
+        if isinstance(key, int):
+            key = str(key)
+        if not isinstance(key, str):
+            raise TypeError("The key must be a string")
+        if not isinstance(resource, str):
+            raise TypeError("resource must be a string")
+        if not resource in self.resources:
+            raise ValueError("This type of resource is not available")
+        get_url = self.url + resource + '/' + key
+        get_request = re.get(get_url, auth=self.auth)
+        if get_request.status_code == 404 :
+            raise ValueError("There is no object with this identifier")
+        if not get_request.status_code == 200 :
+            raise ValueError("Request failed with status code "+str(get_request.status_code))
+        return get_request.json()
+
+

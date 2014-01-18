@@ -35,6 +35,26 @@ class api_test(unittest.TestCase):
         for verb in ['get', 'post', 'patch']:
             assert verb in mg.verbs['taxa']
 
+class get_test(unittest.TestCase):
+
+    def setUp(self):
+        self.mg = api.mangal()
+
+    def test_id_0_is_404(self):
+        self.assertRaises(ValueError, lambda : self.mg.Get(key='0'))
+
+    def test_id_int_is_ok(self):
+        assert isinstance(self.mg.Get(key=1), dict)
+    
+    def test_output_dict(self):
+        assert isinstance(self.mg.Get(key='1'), dict)
+
+    def test_resource_is_str(self):
+        self.assertRaises(TypeError, lambda : self.mg.List(4))
+    
+    def test_resource_available(self):
+        self.assertRaises(ValueError, lambda : self.mg.List('TAXA'))
+
 class list_test(unittest.TestCase):
 
     def setUp(self):
