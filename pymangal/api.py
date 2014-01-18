@@ -2,22 +2,27 @@ import json
 import requests as re
 
 class mangal:
-    """This class will handle connection to the API.
+    """Handles connection to the API
 
-    Args:
-        url (str) : The URL of the api
-        usr (str) : An optional username
-        pwd (str) : An optional password
-
-    Attributes
-    url : The URL of the API + suffix
-    resources : A list of the resources
-
-    >>> mg = mangal(url='http://mangal.uqar.ca')
+    This is the main class used by ``pymangal``.
 
     """
 
     def __init__(self, url='http://mangal.uqar.ca', usr=None, pwd=None):
+        """Creates an instance of a ``mangal`` class
+
+        Args:
+            url (str): The URL of the site with the API
+            usr (str): Your username on the server
+            pwd (str): Your password on the server
+
+        Returns:
+            An object of class ``mangal``
+
+        .. note::
+            At this point, it is assumed that the suffix if
+            ``/api/v1`` - that will be changed in future version
+        """
         auth = None
         # We check that the URL is a string
         if not isinstance(url, str):
