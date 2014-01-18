@@ -10,6 +10,10 @@ class mangal:
     usr : An optional username
     pwd : An optional password
 
+    Attributes
+    url : The URL of the API + suffix
+    resources : A list of the resources
+
     """
 
     def __init__(self, url='http://mangal.uqar.ca', usr=None, pwd=None):
