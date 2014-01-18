@@ -4,7 +4,9 @@ import requests as re
 class mangal:
     """Handles connection to the API
 
-    This is the main class used by ``pymangal``.
+    This is the main class used by ``pymangal``. When called, it will return
+    an object with all methods and attributes required to interact with
+    the database.
 
     """
 
@@ -20,7 +22,7 @@ class mangal:
             An object of class ``mangal``
 
         .. note::
-            At this point, it is assumed that the suffix if
+            At this point, it is assumed that the suffix is
             ``/api/v1`` - that will be changed in future version
         """
         auth = None
@@ -62,3 +64,22 @@ class mangal:
                 raise KeyError("The API do not give a list of allowed methods")
             allowed_verbs[resource] = schema_request.json()['allowed_detail_http_methods']
         self.verbs = allowed_verbs
+
+    def List(self, resource='dataset', filters=None):
+        """ Lists all objects of a given resource type, according to a filter
+
+        Args:
+            resource (str): A type of resource available
+            filters (str): A string giving the filtering parameters
+
+        Returns:
+            objects (array): An array of objects, each being a ``dict``
+        """
+        if not isinstance(resource, str):
+            raise TypeError("resource must be a string")
+        if not filters == None:
+            if not isinstance(filters, str):
+                raise TypeError("filters must be a string")
+        if not resource in self.resources:
+            raise ValueError("This type of resource is not available")
+
