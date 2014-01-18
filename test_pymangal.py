@@ -40,6 +40,9 @@ class get_test(unittest.TestCase):
     def setUp(self):
         self.mg = api.mangal()
 
+    def test_weird_id_type(self):
+        self.assertRaises(TypeError, lambda : self.mg.Get(key = [1, 2]))
+
     def test_id_0_is_404(self):
         self.assertRaises(ValueError, lambda : self.mg.Get(key='0'))
 
@@ -50,10 +53,10 @@ class get_test(unittest.TestCase):
         assert isinstance(self.mg.Get(key='1'), dict)
 
     def test_resource_is_str(self):
-        self.assertRaises(TypeError, lambda : self.mg.List(4))
+        self.assertRaises(TypeError, lambda : self.mg.Get(resource=4))
     
     def test_resource_available(self):
-        self.assertRaises(ValueError, lambda : self.mg.List('TAXA'))
+        self.assertRaises(ValueError, lambda : self.mg.Get(resource='TAXA'))
 
 class list_test(unittest.TestCase):
 
