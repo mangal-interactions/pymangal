@@ -5,4 +5,7 @@ python:
 # Dependencies
 install: "pip install -r requirements.txt"
 # Run test
-script: test_pymangal.py
+script:
+   coverage run --source=pymangal test_pymangal.py
+after_success:
+   coveralls
