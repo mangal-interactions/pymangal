@@ -25,7 +25,9 @@ class mangal:
             At this point, it is assumed that the suffix is
             ``/api/v1`` - that will be changed in future version
         """
+        suffix = '/api/v1/'
         auth = None
+        self.owner = None
         # We check that the URL is a string
         if not isinstance(url, str):
             raise TypeError("The URL must be a string")
@@ -47,7 +49,7 @@ class mangal:
             url = url[-1:]
         # Now we create the URL property
         self.root = url
-        self.url = self.root + '/api/v1/'
+        self.url = self.root + suffix
         # We establish first contact with the API
         # Simply enough, we try to reach the root, and check the response code
         API = re.get(self.url, auth = auth)
@@ -65,6 +67,16 @@ class mangal:
                 raise KeyError("The API do not give a list of allowed methods")
             allowed_verbs[resource] = schema_request.json()['allowed_detail_http_methods']
         self.verbs = allowed_verbs
+        # We get the URI of the user
+        if not self.auth == None :
+            user_url = self.url + 'user' + "?username__exact=" + auth[0]
+            user_request = re.get(user_url)
+            if user_request.status_code == 200 :
+                user_objects = user_request.json()['objects']
+                if len(user_objects) == 0 :
+                    raise ValueError("No user with this name")
+                self.owner = suffix + 'user/' + str(user_objects[0]['id']) + '/'
+
 
     def List(self, resource='dataset', filters=None, autopage=False):
         """ Lists all objects of a given resource type, according to a filter
@@ -129,4 +141,40 @@ class mangal:
             raise ValueError("Request failed with status code "+str(get_request.status_code))
         return get_request.json()
 
+    def Post(self, resource='taxa', data=None):
+        """ Post a resource to the database
 
+        :param resource: The type of object to post
+        :param data: The dict representation of the object
+
+        Using the ``Post`` method requires that you gave a username and
+        password.
+
+        The ``data`` may or may not contain an ``owner`` key. If so, it
+        must be the URI of the owner object. If no ``owner`` key is present,
+        the value used will be ``self.owner``.
+
+        If the request is successful, this method will return the newly created
+        object. If not, it will print the reply from the server and fail.
+
+        """
+        if self.auth == None :
+            raise ValueError("You need to provide authentication to post")
+        if data == None :
+            raise ValueError("You need to provide data")
+        if not isinstance(data, dict):
+            raise TypeError("Data must be in dict format")
+        if not isinstance(resource, str):
+            raise TypeError("resource must be a string")
+        if not resource in self.resources:
+            raise ValueError("This type of resource is not available")
+        post_url = self.url + resource + '/'
+        if not data.has_key('owner'):
+            data['owner'] = self.owner
+        payload = json.dumps(data)
+        post_request = re.post(post_url, auth=self.auth, data=payload, headers = {'content-type': 'application/json'})
+        if post_request.status_code == 201 :
+            return post_request.json()
+        else :
+            print post_request.json()
+            raise ValueError("The request failed with status code "+str(post_request.status_code))

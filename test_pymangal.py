@@ -35,6 +35,20 @@ class api_test(unittest.TestCase):
         for verb in ['get', 'post', 'patch']:
             assert verb in mg.verbs['taxa']
 
+
+## Tests the .Post() function
+## Note that running the test will not actually write
+## data on the server.
+class post_test(unittest.TestCase):
+
+    def setUp(self):
+        self.mg = api.mangal()
+    
+    def test_no_auth(self):
+        self.assertRaises(ValueError, lambda : self.mg.Post())
+
+
+## Tests the .Get() function
 class get_test(unittest.TestCase):
 
     def setUp(self):
@@ -58,6 +72,8 @@ class get_test(unittest.TestCase):
     def test_resource_available(self):
         self.assertRaises(ValueError, lambda : self.mg.Get(resource='TAXA'))
 
+
+## Tests the .List() function
 class list_test(unittest.TestCase):
 
     def setUp(self):
