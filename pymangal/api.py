@@ -100,6 +100,8 @@ class mangal:
         if not resource in self.resources:
             raise ValueError("This type of resource is not available")
         list_url = self.url + resource
+        if not filters == None :
+            list_url += '?' + filters
         list_request = re.get(list_url, auth=self.auth)
         if list_request.status_code != 200 :
             raise ValueError("There was an error in listing the objects")

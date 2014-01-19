@@ -37,15 +37,26 @@ class api_test(unittest.TestCase):
 
 
 ## Tests the .Post() function
-## Note that running the test will not actually write
-## data on the server.
 class post_test(unittest.TestCase):
 
     def setUp(self):
         self.mg = api.mangal()
+        self.mg_auth = api.mangal(usr='test', pwd='test')
     
     def test_no_auth(self):
         self.assertRaises(ValueError, lambda : self.mg.Post())
+
+    def test_no_data(self):
+        self.assertRaises(ValueError, lambda : self.mg_auth.Post())
+
+    def test_string_data(self):
+        self.assertRaises(TypeError, lambda : self.mg_auth.Post(data = 'name: test'))
+
+    def test_resource_is_str(self):
+        self.assertRaises(TypeError, lambda : self.mg_auth.Post(resource=4, data = {}))
+    
+    def test_resource_available(self):
+        self.assertRaises(ValueError, lambda : self.mg_auth.Post(resource='TAXA', data = {}))
 
 
 ## Tests the .Get() function

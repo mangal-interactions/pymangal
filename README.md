@@ -26,9 +26,9 @@ db.List('dataset')
 # Returns all datasets
 db.List('dataset', autopage=True)
 
-# Returns all interactions matching *parasitism
-db.List('interaction', filters='link_type__endswith=parasitism', autopage=True)
+# Returns all taxa matching *vulgaris
+db.List('taxa', filters='name__endswith=vulgaris', autopage=True)
 
-# Get the first taxa
-db.get('taxa', 1)
+# Get the first network
+db.get('network', 1)
 ```
