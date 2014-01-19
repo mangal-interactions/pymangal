@@ -16,10 +16,18 @@ four most important functions are `List`, `Get`, `Post`, and `Patch` (to,
 respectively, see a list of data, get a particular record, add new data,
 and patch them).
 
+## Setting up
+
 ```python
 import pymangal
+# We create an instance of the mangal class
 db = pymangal.mangal()
-   
+# Arguments: url, usr, pwd
+```
+
+## Reading data
+
+```python
 # Returns the first 20 datasets
 db.List('dataset')
 
@@ -31,4 +39,16 @@ db.List('taxa', filters='name__endswith=vulgaris', autopage=True)
 
 # Get the first network
 db.get('network', 1)
+```
+
+## Uploading data
+
+```python
+# Objects are represented as dict
+taxa = {'name': 'Pisaster ochraceus', 'vernacular': 'purple sea star',
+        'status': 'confirmed', 'eol': '598469'}
+# You need to have a username/password to add and patch objects
+db_auth = pymangal.mangal(usr='test', pwd='test')
+taxa = db_auth.Post('taxa', taxa)
+print taxa['id']
 ```
