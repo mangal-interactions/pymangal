@@ -13,17 +13,15 @@ class mangal:
     def __init__(self, url='http://mangal.uqar.ca', usr=None, pwd=None):
         """Creates an instance of a ``mangal`` class
 
-        Args:
-            url (str): The URL of the site with the API
-            usr (str): Your username on the server
-            pwd (str): Your password on the server
+        :param url: The URL of the site with the API
+        :param usr: Your username on the server
+        :param pwd: Your password on the server
 
         Returns:
             An object of class ``mangal``
 
         .. note::
-            At this point, it is assumed that the suffix is
-            ``/api/v1`` - that will be changed in future version
+        At this point, it is assumed that the suffix is ``/api/v1`` - that will be changed in future version
         """
         suffix = '/api/v1/'
         auth = None
@@ -82,9 +80,15 @@ class mangal:
         """ Lists all objects of a given resource type, according to a filter
 
         Args:
-            resource (str): A type of resource available
-            filters (str): A string giving the filtering parameters
-            autopage (true): Whether to keep on listing until all objects are retrieved
+        :param resource: The type of resource
+        :param filters: A string giving the filtering criteria
+        :param autopage: A boolean (default ``False``) telling whether all the results, or just the first 20, should be returned.
+
+        .. note::
+        The ``filters`` string should be formated in the following way: a field,
+        or path through fields, a relation, and a target. For example,
+        ``name__contains=phyto`` is a valid filter.
+
 
         Returns:
             objects (array): An array of objects, each being a ``dict``

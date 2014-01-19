@@ -85,14 +85,44 @@ the database.</p>
 <dt id="pymangal.mangal.List">
 <tt class="descname">List</tt><big>(</big><em>resource='dataset'</em>, <em>filters=None</em>, <em>autopage=False</em><big>)</big><a class="headerlink" href="#pymangal.mangal.List" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists all objects of a given resource type, according to a filter</p>
+<p>Args:
+:param resource: The type of resource
+:param filters: A string giving the filtering criteria
+:param autopage: A boolean (default <tt class="docutils literal"><span class="pre">False</span></tt>) telling whether</p>
+<blockquote>
+<div>all the results, or just the first 20, should be returned.</div></blockquote>
+<p>The <tt class="docutils literal"><span class="pre">filters</span></tt> string should be formated in the following way: a field,
+or path through fields, a relation, and a target. For example,
+<tt class="docutils literal"><span class="pre">name__contains=phyto</span></tt> is a valid filter.</p>
 <dl class="docutils">
-<dt>Args:</dt>
-<dd>resource (str): A type of resource available
-filters (str): A string giving the filtering parameters
-autopage (true): Whether to keep on listing until all objects are retrieved</dd>
 <dt>Returns:</dt>
 <dd>objects (array): An array of objects, each being a <tt class="docutils literal"><span class="pre">dict</span></tt></dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymangal.mangal.Post">
+<tt class="descname">Post</tt><big>(</big><em>resource='taxa'</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#pymangal.mangal.Post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a resource to the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>resource</strong> &#8211; The type of object to post</li>
+<li><strong>data</strong> &#8211; The dict representation of the object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Using the <tt class="docutils literal"><span class="pre">Post</span></tt> method requires that you gave a username and
+password.</p>
+<p>The <tt class="docutils literal"><span class="pre">data</span></tt> may or may not contain an <tt class="docutils literal"><span class="pre">owner</span></tt> key. If so, it
+must be the URI of the owner object. If no <tt class="docutils literal"><span class="pre">owner</span></tt> key is present,
+the value used will be <tt class="docutils literal"><span class="pre">self.owner</span></tt>.</p>
+<p>If the request is successful, this method will return the newly created
+object. If not, it will print the reply from the server and fail.</p>
 </dd></dl>
 
 </dd></dl>
