@@ -1,7 +1,9 @@
 import pymangal
 import unittest
+from jsonschema import validate, ValidationError
 
 from pymangal import api
+from pymangal import makeschema
 
 class api_test(unittest.TestCase):
 
@@ -51,6 +53,9 @@ class post_test(unittest.TestCase):
 
     def test_string_data(self):
         self.assertRaises(TypeError, lambda : self.mg_auth.Post(data = 'name: test'))
+
+    def test_bad_data(self):
+        self.assertRaises(ValidationError, lambda : self.mg_auth.Post(resource='taxa', data = {'taxa': 'taxa name'}))
 
     def test_resource_is_str(self):
         self.assertRaises(TypeError, lambda : self.mg_auth.Post(resource=4, data = {}))
@@ -105,9 +110,23 @@ class list_test(unittest.TestCase):
     def test_output_list(self):
         assert isinstance(self.mg.List('taxa'), list)
 
+## Tests the makeschema function
+class makeschema_test(unittest.TestCase):
+
+    def test_wrong_title(self):
+        self.assertRaises(TypeError, lambda : makeschema({}, 'name', 4))
+
+    def test_no_name(self):
+        self.assertRaises(ValueError, lambda : makeschema({}, None, 'description'))
+    
+    def test_name_no_str(self):
+        self.assertRaises(TypeError, lambda : makeschema({}, 4, 'description'))
+    
+    def test_wrong_data_format(self):
+        self.assertRaises(TypeError, lambda : makeschema([], 'name', 'description'))
 
 def main():
-    unittest.main()
+    unittest.main(verbosity=2)
 
 if __name__ == '__main__':
     main()

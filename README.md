@@ -16,6 +16,9 @@ four most important functions are `List`, `Get`, `Post`, and `Patch` (to,
 respectively, see a list of data, get a particular record, add new data,
 and patch them).
 
+*Unlike in the R package*, there is a validation of the data done automatically
+before the data are either posted or patched.
+
 ## Setting up
 
 ```python
