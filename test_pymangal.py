@@ -1,4 +1,5 @@
 import pymangal
+import sys
 import unittest
 from jsonschema import validate, ValidationError
 
@@ -126,7 +127,10 @@ class makeschema_test(unittest.TestCase):
         self.assertRaises(TypeError, lambda : makeschema([], 'name', 'description'))
 
 def main():
-    unittest.main(verbosity=2)
+    if sys.version_info[1] < 7 :
+        unittest.main()
+    else :
+        unittest.main(verbosity=2)
 
 if __name__ == '__main__':
     main()
