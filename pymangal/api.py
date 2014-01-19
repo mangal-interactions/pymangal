@@ -1,5 +1,7 @@
 import json
+from jsonschema import validate
 import requests as re
+from makeschema import makeschema
 
 class mangal:
     """Handles connection to the API
@@ -21,7 +23,8 @@ class mangal:
             An object of class ``mangal``
 
         .. note::
-        At this point, it is assumed that the suffix is ``/api/v1`` - that will be changed in future version
+            At this point, it is assumed that the suffix is ``/api/v1`` - that will be changed in future version
+
         """
         suffix = '/api/v1/'
         auth = None
@@ -55,6 +58,7 @@ class mangal:
             raise ValueError("The URL you provided ("+url+") gave a "+str(API.status_code)+" status code")
         self.resources = API.json().keys()
         # For each resource, we need to know which verbs are available
+        self.schemes = {}
         allowed_verbs = {}
         for resource in self.resources:
             schema = self.root + API.json()[resource]['schema']
@@ -64,6 +68,7 @@ class mangal:
             if not 'allowed_detail_http_methods' in schema_request.json():
                 raise KeyError("The API do not give a list of allowed methods")
             allowed_verbs[resource] = schema_request.json()['allowed_detail_http_methods']
+            self.schemes[resource] = makeschema(schema_request.json(), name=str(resource))
         self.verbs = allowed_verbs
         # We get the URI of the user
         if not self.auth == None :
@@ -177,6 +182,7 @@ class mangal:
         post_url = self.url + resource + '/'
         if not data.has_key('owner'):
             data['owner'] = self.owner
+        validate(data, self.schemes[resource])
         payload = json.dumps(data)
         post_request = re.post(post_url, auth=self.auth, data=payload, headers = {'content-type': 'application/json'})
         if post_request.status_code == 201 :
