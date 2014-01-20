@@ -5,6 +5,16 @@ documentation is here: <http://pymangal.readthedocs.org/en/latest/>
 
 [![Build Status](https://travis-ci.org/mangal-wg/pymangal.png?branch=master)](https://travis-ci.org/mangal-wg/pymangal) [![Coverage Status](https://coveralls.io/repos/mangal-wg/pymangal/badge.png)](https://coveralls.io/r/mangal-wg/pymangal)
 
+# TODO list
+
+In no particular order
+
+[ ] `networkx` export    
+[ ] `Patch` method     
+[ ] Automated handling of `related` fields (append `prefix`)    
+[ ] `signUp` method   
+[ ] Update the documentation ([learn sphinx][ls])   
+
 # Short tutorial
 
 Contrary to the `rmangal` package, this module focuses on implementing a
@@ -55,3 +65,5 @@ db_auth = pymangal.mangal(usr='test', pwd='test')
 taxa = db_auth.Post('taxa', taxa)
 print taxa['id']
 ```
+
+[ls]: http://sphinx-doc.org/intro.html
