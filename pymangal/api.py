@@ -84,7 +84,6 @@ class mangal:
     def List(self, resource='dataset', filters=None, page=10, offset=0):
         """ Lists all objects of a given resource type, according to a filter
 
-        Args:
         :param resource: The type of resource (default: ``dataset``)
         :param filters: A string giving the filtering criteria (default: ``None``)
         :param page: Either an integer giving the number of results to return, or ``'all'`` (default: ``10``)
@@ -95,6 +94,16 @@ class mangal:
         .. note::
 
             The ``objects`` key of the returned dictionary is a ``list`` of ``dict``, each being a record in the database. The ``meta`` key contains the ``next`` and ``previous`` urls, and the ``total_count`` number of objects for the request.
+        
+        Filtering is done using the following syntax:
+        ``field(s)__relation=target``.  ``field`` is either (i) the name
+        of field of the resource you try to access, or (ii) a path through
+        fields and resources.
+        
+            >>> mg.List('taxa', filters='name__endswith=vulgaris', page='all')
+            # Returns all taxa whose name ends with vulgaris
+            >>> mg.List('population', filters='taxa__name__startswith=Pisaster')
+            # Returns 10 populations of taxa whose name starts with Pisaster
 
         """
         list_objects = []
@@ -146,8 +155,9 @@ class mangal:
 
         :param resource: The type of object to get
         :param key: The unique identifier of the object
-
-        Usage ::
+        :returns: A ``dict`` representation of the resource
+    
+        This method will return the object as a ``dict``
 
             >>> import pymangal
             >>> mg = pymangal.mangal()
