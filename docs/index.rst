@@ -49,6 +49,14 @@ pymangal
       }
 
 
+User guide
+----------
+
+.. toctre::
+   :maxdepth: 2
+
+   user/filtering
+
 The ``mangal`` class
 --------------------
 
