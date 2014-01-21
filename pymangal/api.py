@@ -4,27 +4,27 @@ import requests as re
 from makeschema import makeschema
 
 class mangal:
-    """Handles connection to the API
+    """Creates an object of class ``mangal``
 
     This is the main class used by ``pymangal``. When called, it will return
     an object with all methods and attributes required to interact with
     the database.
 
+    :param url: The URL of the site with the API
+    :param suffix: The suffix of the API
+    :param usr: Your username on the server
+    :param pwd: Your password on the server
+
+    :returns: An object of class ``mangal``
+
+    .. note::
+
+        At this point, it is assumed that the suffix is ``/api/v1`` - that will be changed in future version
+
     """
 
     def __init__(self, url='http://mangal.uqar.ca', suffix='/api/v1/', usr=None, pwd=None):
         """Creates an instance of a ``mangal`` class
-
-        :param url: The URL of the site with the API
-        :param suffix: The suffix of the API
-        :param usr: Your username on the server
-        :param pwd: Your password on the server
-
-        Returns:
-            An object of class ``mangal``
-
-        .. note::
-            At this point, it is assumed that the suffix is ``/api/v1`` - that will be changed in future version
 
         """
         if not suffix[0] == '/':

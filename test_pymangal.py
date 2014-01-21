@@ -41,6 +41,9 @@ class api_test(unittest.TestCase):
     def test_pwd_is_a_string(self):
         self.assertRaises(TypeError, lambda : api.mangal(usr = 'test', pwd = 4))
 
+    def test_correct_username(self):
+        self.assertRaises(ValueError, lambda : api.mangal(usr = 'NoSuchUser', pwd='NoNoNo'))
+
     def test_minimal_elements_in_resources(self):
         mg = api.mangal()
         assert 'taxa' in mg.resources
