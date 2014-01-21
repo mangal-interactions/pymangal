@@ -94,7 +94,7 @@ class mangal:
 
         .. note::
 
-            The ``objects`` key of the returned dictionary is a ``list`` of ``dict``, each being a record in the database. The ``meta`` key contains the ``next`` and ``previous``urls, and the ``total_count`` number of objects for the request.
+            The ``objects`` key of the returned dictionary is a ``list`` of ``dict``, each being a record in the database. The ``meta`` key contains the ``next`` and ``previous`` urls, and the ``total_count`` number of objects for the request.
 
         """
         list_objects = []
@@ -148,9 +148,10 @@ class mangal:
         :param key: The unique identifier of the object
 
         Usage ::
-        >>> import pymangal
-        >>> mg = pymangal.mangal()
-        >>> mg.Get('taxa', '1')
+
+            >>> import pymangal
+            >>> mg = pymangal.mangal()
+            >>> mg.Get('taxa', '1')
         """
         if isinstance(key, int):
             key = str(key)
