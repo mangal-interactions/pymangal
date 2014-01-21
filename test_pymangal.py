@@ -8,6 +8,21 @@ from pymangal import makeschema
 
 class api_test(unittest.TestCase):
 
+    def setUp(self):
+        self.base_url = 'http://mangal.uqar.ca'
+
+    def test_trailing_slash(self):
+        assert api.mangal(url=self.base_url+'/').root == self.base_url
+    
+    def test_suffix_no_slash(self):
+        assert api.mangal(url=self.base_url, suffix='api/v1').root == self.base_url
+    
+    def test_suffix_no_leading_slash(self):
+        assert api.mangal(url=self.base_url, suffix='api/v1/').root == self.base_url
+    
+    def test_suffix_no_trailing_slash(self):
+        assert api.mangal(url=self.base_url, suffix='/api/v1').root == self.base_url
+
     def test_URL_is_a_string(self):
         self.assertRaises(TypeError, lambda : api.mangal(url = 4))
 
@@ -63,7 +78,6 @@ class post_test(unittest.TestCase):
     
     def test_resource_available(self):
         self.assertRaises(ValueError, lambda : self.mg_auth.Post(resource='TAXA', data = {}))
-
 
 ## Tests the .Get() function
 class get_test(unittest.TestCase):

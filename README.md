@@ -9,11 +9,16 @@ documentation is here: <http://pymangal.readthedocs.org/en/latest/>
 
 In no particular order
 
-[ ] `networkx` export    
-[ ] `Patch` method     
-[ ] Automated handling of `related` fields (append `prefix`)    
-[ ] `signUp` method   
-[ ] Update the documentation ([learn sphinx][ls])   
+- `networkx` export
+- `Patch` method
+- Automated handling of `related` fields (append `prefix`)
+- `signUp` method
+- Update the documentation ([learn sphinx][ls])
+
+# Versionning
+
+Follows [semantic versioning][semver]. The version is given in the
+`__version__` variable of `pymangal`. Most important releases are tagged.
 
 # Short tutorial
 
@@ -67,3 +72,4 @@ print taxa['id']
 ```
 
 [ls]: http://sphinx-doc.org/intro.html
+[semver]: http://semver.org/

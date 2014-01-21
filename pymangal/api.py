@@ -12,10 +12,11 @@ class mangal:
 
     """
 
-    def __init__(self, url='http://mangal.uqar.ca', usr=None, pwd=None):
+    def __init__(self, url='http://mangal.uqar.ca', suffix='/api/v1/', usr=None, pwd=None):
         """Creates an instance of a ``mangal`` class
 
         :param url: The URL of the site with the API
+        :param suffix: The suffix of the API
         :param usr: Your username on the server
         :param pwd: Your password on the server
 
@@ -26,7 +27,11 @@ class mangal:
             At this point, it is assumed that the suffix is ``/api/v1`` - that will be changed in future version
 
         """
-        suffix = '/api/v1/'
+        if not suffix[0] == '/':
+            suffix = '/'+suffix
+        if not suffix[-1:] == '/':
+            suffix += '/'
+        self.suffix = suffix
         auth = None
         self.owner = None
         # We check that the URL is a string
@@ -47,12 +52,11 @@ class mangal:
         # We don't want the URL to end with a trailing slash
         # (if only because it makes things simpler after)
         if url[-1:] == '/':
-            url = url[-1:]
+            url = url[:-1]
         # Now we create the URL property
         self.root = url
-        self.url = self.root + suffix
+        self.url = self.root + self.suffix
         # We establish first contact with the API
-        # Simply enough, we try to reach the root, and check the response code
         API = re.get(self.url, auth = auth)
         if not API.status_code == 200 :
             raise ValueError("The URL you provided ("+url+") gave a "+str(API.status_code)+" status code")
@@ -78,7 +82,7 @@ class mangal:
                 user_objects = user_request.json()['objects']
                 if len(user_objects) == 0 :
                     raise ValueError("No user with this name")
-                self.owner = suffix + 'user/' + str(user_objects[0]['id']) + '/'
+                self.owner = self.suffix + 'user/' + str(user_objects[0]['id']) + '/'
 
 
     def List(self, resource='dataset', filters=None, autopage=False):
