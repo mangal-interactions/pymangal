@@ -10,16 +10,12 @@ class mangal:
     an object with all methods and attributes required to interact with
     the database.
 
-    :param url: The URL of the site with the API
-    :param suffix: The suffix of the API
-    :param usr: Your username on the server
-    :param pwd: Your password on the server
+    :param url: The URL of the site with the API (default: ``http://mangal.uqar.ca``)
+    :param suffix: The suffix of the API (default: ``/api/v1/``)
+    :param usr: Your username on the server (default: ``None``)
+    :param pwd: Your password on the server (default: ``None``)
 
     :returns: An object of class ``mangal``
-
-    .. note::
-
-        At this point, it is assumed that the suffix is ``/api/v1`` - that will be changed in future version
 
     """
 
@@ -85,26 +81,36 @@ class mangal:
                 self.owner = self.suffix + 'user/' + str(user_objects[0]['id']) + '/'
 
 
-    def List(self, resource='dataset', filters=None, autopage=False):
+    def List(self, resource='dataset', filters=None, page=10, offset=0):
         """ Lists all objects of a given resource type, according to a filter
 
         Args:
-        :param resource: The type of resource
-        :param filters: A string giving the filtering criteria
-        :param autopage: A boolean (default ``False``) telling whether all the results, or just the first 20, should be returned.
+        :param resource: The type of resource (default: ``dataset``)
+        :param filters: A string giving the filtering criteria (default: ``None``)
+        :param page: Either an integer giving the number of results to return, or ``'all'`` (default: ``10``)
+        :param offset: Number of initial results to discard (default: ``0``)
+
+        :returns: A ``dict`` with keys ``meta`` and ``objects``
 
         .. note::
-        The ``filters`` string should be formated in the following way: a field,
-        or path through fields, a relation, and a target. For example,
-        ``name__contains=phyto`` is a valid filter.
 
+            The ``objects`` key of the returned dictionary is a ``list`` of ``dict``, each being a record in the database. The ``meta`` key contains the ``next`` and ``previous``urls, and the ``total_count`` number of objects for the request.
 
-        Returns:
-            objects (array): An array of objects, each being a ``dict``
         """
         list_objects = []
-        if not isinstance(autopage, bool):
-            raise TypeError("autopage must be a boolean")
+        if isinstance(page, str):
+            if not page == 'all':
+                raise ValueError("If 'page' is given as a string, it must be 'all'")
+        else :
+            if isinstance(page, int):
+                if page < 1 :
+                    raise ValueError("page must be greater or equal to 1")
+            else :
+                raise TypeError("page must be either a string or an integer")
+        if not isinstance(offset, int):
+            raise TypeError("offset must be an integer")
+        if offset < 0 :
+            raise ValueError("offset must be positive")
         if not isinstance(resource, str):
             raise TypeError("resource must be a string")
         if not filters == None:
@@ -113,21 +119,27 @@ class mangal:
         if not resource in self.resources:
             raise ValueError("This type of resource is not available")
         list_url = self.url + resource
+        if page != 'all':
+            off_pages = "limit="+str(page)+"&offset="+str(offset)
+            if filters == None :
+                filters = off_pages
+            else :
+                filters = off_pages + '&' + filters
         if not filters == None :
             list_url += '?' + filters
         list_request = re.get(list_url, auth=self.auth)
         if list_request.status_code != 200 :
-            raise ValueError("There was an error in listing the objects")
+            raise ValueError("There was an error in listing the objects. Status code "+str(list_request.status_code))
         list_content = list_request.json()
         if not list_content.has_key('objects'):
             raise KeyError('Badly formatted reply')
         list_objects += list_content['objects']
-        if autopage:
+        if page == 'all':
             while not list_content['meta']['next'] == None :
                 list_request = re.get(self.root + list_content['meta']['next'], auth=self.auth)
                 list_content = list_request.json()
                 list_objects += list_content['objects']
-        return list_objects
+        return {'meta': list_content['meta'], 'objects': list_objects}
 
     def Get(self, resource='dataset', key='1'):
         """ Get an object identified by its key (id)

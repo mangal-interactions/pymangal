@@ -113,9 +113,6 @@ class list_test(unittest.TestCase):
     def setUp(self):
         self.mg = api.mangal()
 
-    def test_autopage_is_boolean(self):
-        self.assertRaises(TypeError, lambda : self.mg.List(autopage=1))
-
     def test_resource_is_str(self):
         self.assertRaises(TypeError, lambda : self.mg.List(4))
 
@@ -126,7 +123,37 @@ class list_test(unittest.TestCase):
         self.assertRaises(ValueError, lambda : self.mg.List('TAXA'))
 
     def test_output_list(self):
-        assert isinstance(self.mg.List('taxa'), list)
+        assert isinstance(self.mg.List('taxa'), dict)
+
+    def test_offset_list(self):
+        assert isinstance(self.mg.List('taxa', offset=1), dict)
+
+    def test_page_list(self):
+        assert len(self.mg.List('taxa', page=4)['objects']) <= 4
+
+    def test_page_offset_list(self):
+        assert isinstance(self.mg.List('taxa', offset=1, page=3)['objects'], list)
+
+    def test_page_all(self):
+        assert isinstance(self.mg.List('dataset', page='all')['objects'], list)
+
+    def test_page_offset_filter(self):
+        assert isinstance(self.mg.List('taxa', page=2, offset=2, filters='name__contains=i')['objects'], list)
+
+    def test_page_badstring(self):
+        self.assertRaises(ValueError, lambda : self.mg.List('dataset', page='All'))
+
+    def test_page_badtype(self):
+        self.assertRaises(TypeError, lambda : self.mg.List('dataset', page=[1,2]))
+
+    def test_page_badvalue(self):
+        self.assertRaises(ValueError, lambda : self.mg.List('dataset', page=0))
+    
+    def test_offset_badtype(self):
+        self.assertRaises(TypeError, lambda : self.mg.List('dataset', offset="1"))
+
+    def test_offset_badvalue(self):
+        self.assertRaises(ValueError, lambda : self.mg.List('dataset', offset=-1))
 
 ## Tests the makeschema function
 class makeschema_test(unittest.TestCase):
