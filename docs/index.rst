@@ -16,6 +16,7 @@ These pages will cover the use of various aspect of the ``pymangal`` module.
 .. toctree::
    :maxdepth: 2
 
+   user/basics
    user/filtering
    user/contributing
 
