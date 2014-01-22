@@ -30,6 +30,7 @@ are mostly intended for people wanting to know *how the sausage is made*
    :maxdepth: 1
 
    pymangal.rst
+   checks.rst
 
 Indices and tables
 ==================

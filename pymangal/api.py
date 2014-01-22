@@ -2,6 +2,7 @@ import json
 from jsonschema import validate
 import requests as re
 from makeschema import makeschema
+from checks import *
 
 class mangal:
     """Creates an object of class ``mangal``
@@ -110,13 +111,10 @@ class mangal:
             raise TypeError("offset must be an integer")
         if offset < 0 :
             raise ValueError("offset must be positive")
-        if not isinstance(resource, str):
-            raise TypeError("resource must be a string")
+        check_resource_arg(self, resource)
         if not filters == None:
             if not isinstance(filters, str):
                 raise TypeError("filters must be a string")
-        if not resource in self.resources:
-            raise ValueError("This type of resource is not available")
         list_url = self.url + resource
         if page != 'all':
             off_pages = "limit="+str(page)+"&offset="+str(offset)
@@ -152,10 +150,7 @@ class mangal:
             key = str(key)
         if not isinstance(key, str):
             raise TypeError("The key must be a string")
-        if not isinstance(resource, str):
-            raise TypeError("resource must be a string")
-        if not resource in self.resources:
-            raise ValueError("This type of resource is not available")
+        check_resource_arg(self, resource)
         get_url = self.url + resource + '/' + key
         get_request = re.get(get_url, auth=self.auth)
         if get_request.status_code == 404 :
@@ -169,13 +164,14 @@ class mangal:
 
         :param resource: The type of object to post
         :param data: The dict representation of the object
-
-        Using the ``Post`` method requires that you gave a username and
-        password.
-
+        
         The ``data`` may or may not contain an ``owner`` key. If so, it
         must be the URI of the owner object. If no ``owner`` key is present,
         the value used will be ``self.owner``.
+
+        .. note::
+            
+            This method converts the fields values to URIs automatically
 
         If the request is successful, this method will return the newly created
         object. If not, it will print the reply from the server and fail.
@@ -187,13 +183,14 @@ class mangal:
             raise ValueError("You need to provide data")
         if not isinstance(data, dict):
             raise TypeError("Data must be in dict format")
-        if not isinstance(resource, str):
-            raise TypeError("resource must be a string")
-        if not resource in self.resources:
-            raise ValueError("This type of resource is not available")
+        check_resource_arg(self, resource)
         post_url = self.url + resource + '/'
         if not data.has_key('owner'):
             data['owner'] = self.owner
+        ## We need to check that for each relation, the key is
+        ## replaced by suffix + resource + key
+
+        ## OK, moving on
         validate(data, self.schemes[resource])
         payload = json.dumps(data)
         post_request = re.post(post_url, auth=self.auth, data=payload, headers = {'content-type': 'application/json'})
