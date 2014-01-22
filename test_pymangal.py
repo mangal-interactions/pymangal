@@ -5,6 +5,7 @@ from jsonschema import validate, ValidationError
 
 from pymangal import api
 from pymangal import makeschema
+from pymangal import checks
 
 class api_test(unittest.TestCase):
 
@@ -55,6 +56,21 @@ class api_test(unittest.TestCase):
         mg = api.mangal()
         for verb in ['get', 'post', 'patch']:
             assert verb in mg.verbs['taxa']
+
+## Tests the check functions
+class check_test(unittest.TestCase):
+
+    def setUp(self):
+        self.mg = api.mangal()
+
+    def test_check_res_bad_api(self):
+        self.assertRaises(TypeError, lambda : checks.check_resource_arg('http://mangal.uqar.ca', 'taxa'))
+
+    def test_check_res_no_str(self):
+        self.assertRaises(TypeError, lambda : checks.check_resource_arg(self.mg, 4))
+
+    def test_check_res_no_res(self):
+        self.assertRaises(ValueError, lambda : checks.check_resource_arg(self.mg, 'taxon'))
 
 
 ## Tests the .Post() function
