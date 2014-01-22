@@ -8,62 +8,28 @@ pymangal
 
 ``pymangal`` is a library to interact with ``mangal`` API. It implements the basic methods (``Post``, ``Get``, ``List``, and ``Patch``).
 
-::
-
-   >>> import pymangal as pm
-   >>> api = pm.mangal()
-   >>> datasets = api.List('dataset', page='all')
-   >>> print json.dumps(datasets['objects'], indent=3)
-      [
-      {
-      "description": "Structure of local anemonefish-anemone networks across the Manado region of Sulawesi, Indonesia", 
-      "id": "1", 
-      "environment": [], 
-      "papers": [
-         "1"
-      ], 
-      "owner": "timpoisot", 
-      "data": [
-      "2"
-      ], 
-      "networks": [
-      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", 
-      "14", "15", "16"
-      ], 
-      "name": "Indonesian anemonefish-anemone networks"
-      }
-      ]
-   >>> print json.dumps(api.Get('network', 1), indent=3)
-      {
-      "description": null, 
-      "interactions": [
-      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
-      ], 
-      "owner": "timpoisot", 
-      "longitude": "124.819", 
-      "environment": [], 
-      "latitude": "1.585", 
-      "date": null, 
-      "id": "1", 
-      "name": "Bahowo"
-      }
-
-
 User guide
 ----------
 
-.. toctre::
+These pages will cover the use of various aspect of the ``pymangal`` module.
+
+.. toctree::
    :maxdepth: 2
 
    user/filtering
+   user/contributing
 
-The ``mangal`` class
+Developer guide
 --------------------
 
-.. automodule:: pymangal
+These page give the complete reference of the ``pymangal`` module. They
+are mostly intended for people wanting to know *how the sausage is made*
+(with heavy chucks of JSON).
 
-.. autoclass:: mangal
-   :members:
+.. toctree::
+   :maxdepth: 1
+
+   pymangal.rst
 
 Indices and tables
 ==================
