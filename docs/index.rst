@@ -6,7 +6,12 @@
 pymangal
 ========
 
-``pymangal`` is a library to interact with ``mangal`` API. It implements the basic methods (``Post``, ``Get``, ``List``, and ``Patch``).
+``pymangal`` is a library to interact with APIs returning ecological
+interaction networks datasets in the format specified by the ``mangal``
+data specification. More informations on ``mangal`` can be found **here**.
+
+The ``pymangal`` module provides way to browse, search, and get data, as
+well as to upload or patch them.
 
 User guide
 ----------
