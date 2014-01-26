@@ -169,9 +169,7 @@ class mangal:
         must be the URI of the owner object. If no ``owner`` key is present,
         the value used will be ``self.owner``.
 
-        .. note::
-            
-            This method converts the fields values to URIs automatically
+        This method converts the fields values to URIs automatically
 
         If the request is successful, this method will return the newly created
         object. If not, it will print the reply from the server and fail.
@@ -187,6 +185,7 @@ class mangal:
         post_url = self.url + resource + '/'
         if not data.has_key('owner'):
             data['owner'] = self.owner
+        validate(data, self.schemes[resource])
         ## We need to check that for each relation, the key is
         ## replaced by suffix + resource + key
         for k in [x for x in data.keys() if not x == 'owner']:
@@ -195,9 +194,6 @@ class mangal:
                     data[k] = map(lambda x: self.suffix + k + '/' + x + '/', data[k])
                 else :
                     data[k] = self.suffix + k + '/' + data[k] + '/'
-        ## OK, moving on
-        validate(data, self.schemes[resource])
-        print data
         payload = json.dumps(data)
         post_request = re.post(post_url, auth=self.auth, data=payload, headers = {'content-type': 'application/json'})
         if post_request.status_code == 201 :
