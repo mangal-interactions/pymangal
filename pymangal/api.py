@@ -189,9 +189,15 @@ class mangal:
             data['owner'] = self.owner
         ## We need to check that for each relation, the key is
         ## replaced by suffix + resource + key
-
+        for k in [x for x in data.keys() if not x == 'owner']:
+            if 'URI' in self.schemes[resource]['properties'][k]['description']:
+                if self.schemes[resource]['properties'][k]['type'] == 'array':
+                    data[k] = map(lambda x: self.suffix + k + '/' + x + '/', data[k])
+                else :
+                    data[k] = self.suffix + k + '/' + data[k] + '/'
         ## OK, moving on
         validate(data, self.schemes[resource])
+        print data
         payload = json.dumps(data)
         post_request = re.post(post_url, auth=self.auth, data=payload, headers = {'content-type': 'application/json'})
         if post_request.status_code == 201 :
