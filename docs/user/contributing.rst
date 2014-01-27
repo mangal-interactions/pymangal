@@ -17,8 +17,7 @@ Sending data into the database is done though the ``Post`` method of the
 and ``data``. ``resource`` is the  type of object you are sending in the
 database, and ``data`` is the object as a python ``dict``.::
 
-   >>> my_taxa = {'name': 'Carcharodon carcharias', 'vernacular': 'Great white shark',
-                  'eol': 213726, 'status': 'confirmed'}
+   >>> my_taxa = {'name': 'Carcharodon carcharias', 'vernacular': 'Great white shark', 'eol': 213726, 'status': 'confirmed'}
    >>> great_white = api.Post('taxa', my_taxa)
 
 The ``mangal`` API is configured so that, when data are received or modified,
@@ -58,7 +57,7 @@ The next step is to create interactions between these taxa: ::
 
 That being done, we will now create a network with the different interactions: ::
 
-   >>> net = api.Post('network', {'name': 'Isle Royale National Park', 'interactions': map(lambda x: x['id'], [w_m, m_b])}
+   >>> net = api.Post('network', {'name': 'Isle Royale National Park', 'interactions': map(lambda x: x['id'], [w_m, m_b])})
 
 The last step is to put this network into a dataset: ::
 
