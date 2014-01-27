@@ -6,3 +6,6 @@ __license__ = 'BSD-2'
 
 from api import mangal
 from makeschema import makeschema
+
+if __version__[0] == '0':
+    print "pymangal v."+__version__+" - this is an UNSTABLE release"

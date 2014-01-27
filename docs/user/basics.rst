@@ -20,6 +20,21 @@ latest version from the *GitHub* repository, using *e.g.*: ::
    cp pymangal-master/pymangal .
    rm -r pymangal-master
 
+Then from within the ``pymangal`` folder, ::
+
+   make requirements
+   make test
+   make install
+
+Alternatively, ``make all`` will download the requirements, run the tests,
+and install the module. Note that by default, the ``makefile`` calls
+``python2`` and ``pip2``. If your versions of ptyhon 2 and pip are called,
+*e.g.*, ``python27`` and ``pip``, you need to pass them as variable names when
+calling make: ::
+
+   make all pip=pip python=python27
+
+
 Creating a mangal object
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
