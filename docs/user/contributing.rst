@@ -53,8 +53,8 @@ Now, we will take each of these objects, and send them into the database: ::
 
 The next step is to create interactions between these taxa: ::
 
-   >>> w_m = api.Post('interaction', {'taxa_from': wolf['id'], 'taxa_to': moose['id'], 'link_type': 'predation', 'obs_type': 'literature'})
-   >>> m_b = api.Post('interaction', {'taxa_from': moose['id'], 'taxa_to': fir['id'], 'link_type': 'herbivory', 'obs_type': 'literature'})
+   >>> w_m = api.Post('interaction', {'taxa_from': wolf['id'], 'taxa_to': moose['id'], 'link_type': 'predation', 'obs_type': 'litterature'})
+   >>> m_b = api.Post('interaction', {'taxa_from': moose['id'], 'taxa_to': fir['id'], 'link_type': 'herbivory', 'obs_type': 'litterature'})
 
 That being done, we will now create a network with the different interactions: ::
 

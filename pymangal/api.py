@@ -53,6 +53,26 @@ class mangal:
         # Now we create the URL property
         self.root = url
         self.url = self.root + self.suffix
+        # List of fields names/types
+        # This gives the type of all relational fields
+        self.field_names = {
+                'taxa': 'taxa',
+                'taxa_from': 'taxa',
+                'taxa_to': 'taxa',
+                'pop_from': 'population',
+                'pop_to': 'population',
+                'item_to': 'item',
+                'item_from': 'item',
+                'environment': 'environment',
+                'traits': 'trait',
+                'networks': 'network',
+                'interactions': 'interaction',
+                'traits': 'trait',
+                'papers': 'reference',
+                'data': 'reference',
+                'networks': 'network',
+                'population': 'population'
+                }
         # We establish first contact with the API
         API = re.get(self.url, auth = auth)
         if not API.status_code == 200 :
@@ -189,11 +209,15 @@ class mangal:
         ## We need to check that for each relation, the key is
         ## replaced by suffix + resource + key
         for k in [x for x in data.keys() if not x == 'owner']:
+            if self.field_names.has_key(k):
+                fname = self.field_names[k]
+            else :
+                fname = k
             if 'URI' in self.schemes[resource]['properties'][k]['description']:
                 if self.schemes[resource]['properties'][k]['type'] == 'array':
-                    data[k] = map(lambda x: self.suffix + k + '/' + x + '/', data[k])
+                    data[k] = map(lambda x: self.suffix + fname + '/' + x + '/', data[k])
                 else :
-                    data[k] = self.suffix + k + '/' + data[k] + '/'
+                    data[k] = self.suffix + fname + '/' + data[k] + '/'
         payload = json.dumps(data)
         post_request = re.post(post_url, auth=self.auth, data=payload, headers = {'content-type': 'application/json'})
         if post_request.status_code == 201 :
