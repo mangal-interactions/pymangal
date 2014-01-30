@@ -7,6 +7,11 @@ from pymangal import api
 from pymangal import makeschema
 from pymangal import checks
 
+# These are testing user informations
+# Anything written by this user will be destroyed
+USER = 'test_user'
+KEY = '2ab887fd3857bdfb1de9d80999a89a4dd57a1292'
+
 class api_test(unittest.TestCase):
 
     def setUp(self):
@@ -14,36 +19,36 @@ class api_test(unittest.TestCase):
 
     def test_trailing_slash(self):
         assert api.mangal(url=self.base_url+'/').root == self.base_url
-    
+
     def test_suffix_no_slash(self):
         assert api.mangal(url=self.base_url, suffix='api/v1').root == self.base_url
-    
+
     def test_suffix_no_leading_slash(self):
         assert api.mangal(url=self.base_url, suffix='api/v1/').root == self.base_url
-    
+
     def test_suffix_no_trailing_slash(self):
         assert api.mangal(url=self.base_url, suffix='/api/v1').root == self.base_url
 
     def test_URL_is_a_string(self):
-        self.assertRaises(TypeError, lambda : api.mangal(url = 4))
+        self.assertRaises(TypeError, lambda : api.mangal(url=4))
 
     def test_Fake_URLs_give_404(self):
-        self.assertRaises(ValueError, lambda : api.mangal(url = 'http://t.co/'))
+        self.assertRaises(ValueError, lambda : api.mangal(url='http://t.co/'))
 
-    def test_if_usr_then_pwd(self):
-        self.assertRaises(ValueError, lambda : api.mangal(usr = 'test'))
+    def test_if_usr_then_key(self):
+        self.assertRaises(ValueError, lambda : api.mangal(usr=USER))
 
-    def test_if_pwd_then_usr(self):
-        self.assertRaises(ValueError, lambda : api.mangal(pwd = 'test'))
+    def test_if_key_then_usr(self):
+        self.assertRaises(ValueError, lambda : api.mangal(key=KEY))
 
     def test_usr_is_a_string(self):
-        self.assertRaises(TypeError, lambda : api.mangal(usr = 4, pwd = 'test'))
+        self.assertRaises(TypeError, lambda : api.mangal(usr=4, key=KEY))
 
-    def test_pwd_is_a_string(self):
-        self.assertRaises(TypeError, lambda : api.mangal(usr = 'test', pwd = 4))
+    def test_key_is_a_string(self):
+        self.assertRaises(TypeError, lambda : api.mangal(usr=USER, key=4))
 
     def test_correct_username(self):
-        self.assertRaises(ValueError, lambda : api.mangal(usr = 'NoSuchUser', pwd='NoNoNo'))
+        self.assertRaises(ValueError, lambda : api.mangal(usr='user', key=KEY))
 
     def test_minimal_elements_in_resources(self):
         mg = api.mangal()
@@ -78,8 +83,8 @@ class post_test(unittest.TestCase):
 
     def setUp(self):
         self.mg = api.mangal()
-        self.mg_auth = api.mangal(usr='test', pwd='test')
-    
+        self.mg_auth = api.mangal(usr=USER, key=KEY)
+
     def test_no_auth(self):
         self.assertRaises(ValueError, lambda : self.mg.Post())
 
@@ -94,7 +99,7 @@ class post_test(unittest.TestCase):
 
     def test_resource_is_str(self):
         self.assertRaises(TypeError, lambda : self.mg_auth.Post(resource=4, data = {}))
-    
+
     def test_resource_available(self):
         self.assertRaises(ValueError, lambda : self.mg_auth.Post(resource='TAXA', data = {}))
 
@@ -112,13 +117,13 @@ class get_test(unittest.TestCase):
 
     def test_id_int_is_ok(self):
         assert isinstance(self.mg.Get(key=1), dict)
-    
+
     def test_output_dict(self):
         assert isinstance(self.mg.Get(key='1'), dict)
 
     def test_resource_is_str(self):
         self.assertRaises(TypeError, lambda : self.mg.Get(resource=4))
-    
+
     def test_resource_available(self):
         self.assertRaises(ValueError, lambda : self.mg.Get(resource='TAXA'))
 
@@ -164,7 +169,7 @@ class list_test(unittest.TestCase):
 
     def test_page_badvalue(self):
         self.assertRaises(ValueError, lambda : self.mg.List('dataset', page=0))
-    
+
     def test_offset_badtype(self):
         self.assertRaises(TypeError, lambda : self.mg.List('dataset', offset="1"))
 
@@ -179,10 +184,10 @@ class makeschema_test(unittest.TestCase):
 
     def test_no_name(self):
         self.assertRaises(ValueError, lambda : makeschema({}, None, 'description'))
-    
+
     def test_name_no_str(self):
         self.assertRaises(TypeError, lambda : makeschema({}, 4, 'description'))
-    
+
     def test_wrong_data_format(self):
         self.assertRaises(TypeError, lambda : makeschema([], 'name', 'description'))
 

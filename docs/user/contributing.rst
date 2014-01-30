@@ -3,13 +3,18 @@
 How to upload data
 ==================
 
-This page will walk you through the upload of a simple food web with three
-species. The goal is to cover the basic mechanisms. To upload data, a good
-knowledge of the data specification is important. ``JSON`` schemes are
-imported when connecting to the database the first time ::
+This page will walk you through the upload of a simple food web with
+three species. The goal is to cover the basic mechanisms. Posting
+data requires to be authenticated. Users can register at <
+http://mangal.uqar.ca/dashboard/>. Authentication is done with the username
+and API key.
+
+To upload data, a good knowledge of the data specification is
+important. ``JSON`` schemes are imported when connecting to the database
+the first time ::
 
    >>> import pymangal as pm
-   >>> api = pm.mangal(usr='myUserName', pwd='myPassword')
+   >>> api = pm.mangal(usr='myUserName', key='myApiKey')
    >>> api.schemes.keys()
 
 Sending data into the database is done though the ``Post`` method of the
