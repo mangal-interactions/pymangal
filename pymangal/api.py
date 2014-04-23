@@ -197,17 +197,8 @@ class mangal:
         object. If not, it will print the reply from the server and fail.
 
         """
-        if not self.auth:
-            raise ValueError("You need to provide authentication to post")
-        if data == None :
-            raise ValueError("You need to provide data")
-        if not isinstance(data, dict):
-            raise TypeError("Data must be in dict format")
-        check_resource_arg(self, resource)
+        check_upload_res(self, resource, data)
         post_url = self.url + resource + '/'
-        if not data.has_key('owner'):
-            data['owner'] = self.owner
-        validate(data, self.schemes[resource])
         ## We need to check that for each relation, the key is
         ## replaced by suffix + resource + key
         for k in [x for x in data.keys() if not x == 'owner']:

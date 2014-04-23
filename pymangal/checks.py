@@ -1,3 +1,5 @@
+from jsonschema import validate
+
 # functions to check user-supplied arguments
 
 def check_resource_arg(api, resource):
@@ -20,3 +22,33 @@ def check_resource_arg(api, resource):
         raise TypeError("The resource argument must be given as a string")
     if not resource in api.resources:
         raise ValueError("The API do not expose resources of types "+resource)
+
+def check_upload_res(api, resource, data):
+    """Checks that the data to be uploaded are in the proper format
+
+    :param api: A ``mangal`` instance
+    :param resource: A resource argument
+    :param data: The data to be uploaded. This is supposed to be a dict.
+
+    :returns: Nothing, but fails if something is wrong.
+
+    The first checks are basic:
+
+    * the user must provide authentication
+    * the data must be given as a dict
+
+    The next check concers data validity, i.e. they must conform to the data schema
+    in json, as obtained from the API root when calling ``__init__``.
+    """
+    # This saves a bunch of typing
+    check_resource_arg(api, resource)
+    # Next, checks on the data
+    if not api.auth:
+        raise ValueError("You need to provide authentication to post")
+    if data == None :
+        raise ValueError("You need to provide data")
+    if not isinstance(data, dict):
+        raise TypeError("Data must be in dict format")
+    if not data.has_key('owner'):
+        data['owner'] = api.owner
+    validate(data, api.schemes[resource])
