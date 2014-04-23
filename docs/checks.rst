@@ -14,3 +14,4 @@ Documentation
 
 .. autofunction:: check_resource_arg 
 
+.. autofunction:: check_upload_res
