@@ -140,6 +140,9 @@ class list_test(unittest.TestCase):
     def test_filters_is_str(self):
         self.assertRaises(TypeError, lambda : self.mg.List('taxa', 2))
 
+    def test_filters_space_replaced(self):
+        assert isinstance(self.mg.List('taxa', 'name__contains=s b'), dict)
+
     def test_resource_available(self):
         self.assertRaises(ValueError, lambda : self.mg.List('TAXA'))
 

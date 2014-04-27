@@ -1,7 +1,5 @@
 from jsonschema import validate
 
-# functions to check user-supplied arguments
-
 def check_resource_arg(api, resource):
     """Checks that the ``resource`` argument is correct
 
@@ -52,3 +50,18 @@ def check_upload_res(api, resource, data):
     if not data.has_key('owner'):
         data['owner'] = api.owner
     validate(data, api.schemes[resource])
+
+def check_filters(filters):
+    """Checks that the filters are valid
+
+    :param filters: A string of filters
+
+    :returns: Nothing, but can modify ``filters`` in place
+
+    At the moment, this function do not parse the filters to make sure that they are valid.
+
+    The ``filters`` string is modified in place if it contains space.
+    """
+    if not isinstance(filters, str):
+        raise TypeError("filters must be a string")
+    filters.replace(' ', '%20')

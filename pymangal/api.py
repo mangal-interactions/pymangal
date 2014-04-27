@@ -135,8 +135,7 @@ class mangal:
             raise ValueError("offset must be positive")
         check_resource_arg(self, resource)
         if not filters == None:
-            if not isinstance(filters, str):
-                raise TypeError("filters must be a string")
+            check_filters(filters)
         list_url = self.url + resource
         if page != 'all':
             off_pages = "limit="+str(page)+"&offset="+str(offset)

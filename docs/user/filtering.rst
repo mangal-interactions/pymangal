@@ -18,6 +18,9 @@ Filtering follows the general syntax::
 the ten possible values given below. Finally, ``target`` is the value to
 match. It is possible to join several filters, by joining them with ``&``.
 
+Note that if the ``target`` contains spaces, they will be automatically
+changed to ``%20``, so you won't have to worry about that.
+
 Examples
 ~~~~~~~~
 

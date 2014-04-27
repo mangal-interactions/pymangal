@@ -15,3 +15,5 @@ Documentation
 .. autofunction:: check_resource_arg 
 
 .. autofunction:: check_upload_res
+
+.. autofunction:: check_filters
