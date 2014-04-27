@@ -59,7 +59,9 @@ relation        description
 Filtering through multiple resources
 ------------------------------------
 
-It is possible to combine several resources when filtering. For example, if one want to retrieve populations belonging to the taxa *Alces americanus*, the syntax is ::
+It is possible to combine several resources when filtering. For example, if
+one want to retrieve populations belonging to the taxa *Alces americanus*,
+the syntax is ::
 
    taxa__name__exact=Alces%20americanus
 

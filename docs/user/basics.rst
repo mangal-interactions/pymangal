@@ -104,12 +104,25 @@ is (roughly, you still would have to recompose the object) equivalent to ::
 Filtering
 ~~~~~~~~~
 
-There is a special page on filtering_. When fitlering, it is recommended to
+There is a special page on filtering_. When filtering, it is recommended to
 use ``page='all'``, as it will ensure that all matched results are returned.
 
 Getting a particular resource
 -----------------------------
 
+Getting a particular resource required that you know its type, and its unique
+identifier. For example, getting the ``taxa`` with ``id`` equal to 8 si ::
+
+   >>> taxa_8 = api.Get('taxa', 8)
+
+The object is returned *as is*, *i.e.* as a python ``Dict``. If there is
+no object with the given ``id``, or no matching ``type``, then the call to
+``Get`` will fail.
+
 Creating and modifying resources
 --------------------------------
 
+There is a page dedicated to contributing_. Users with data that they want
+to add to the *mangal* database are invited to read this page, which gives
+informations about (1) how to register online and (2) how to prepare data
+for upload.

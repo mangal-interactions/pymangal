@@ -1,8 +1,3 @@
-.. pymangal documentation master file, created by
-   sphinx-quickstart on Sat Jan 18 16:45:58 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 pymangal
 ========
 
@@ -12,6 +7,12 @@ data specification. More informations on ``mangal`` can be found **here**.
 
 The ``pymangal`` module provides way to browse, search, and get data, as
 well as to upload or patch them.
+
+Data in the ``mangal`` database are released under the *Creative Commons 0*
+waiver. Anyone is free to access and use them. Note that the usual rules
+of good conduct among academics apply, and you are expected to credit data
+collectors by citing either the dataset, or the original publication. These
+informations are available in the ``dataset`` object.
 
 User guide
 ----------
