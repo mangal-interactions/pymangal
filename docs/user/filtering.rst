@@ -49,7 +49,7 @@ relation        description
 ==============  ========================================================
 ``startswith``  All fields starting by the target
 ``endswith``    All fields ending by the target
-``exacts``      Exact matching
+``exact``       Exact matching
 ``contains``    Fields that contain the target
 ``range``       Fields with values in the range
 ``gt``          Field with values greater than the target

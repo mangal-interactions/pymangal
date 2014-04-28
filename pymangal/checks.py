@@ -56,12 +56,33 @@ def check_filters(filters):
 
     :param filters: A string of filters
 
-    :returns: Nothing, but can modify ``filters`` in place
+    :returns: Nothing, but can modify ``filters`` in place, and raises ``ValueError``s if the filters are badly formatted.
 
-    At the moment, this function do not parse the filters to make sure that they are valid.
+    This functions conducts minimal parsing, to make sure that the relationship exists, and that the filter is generally well formed.
 
     The ``filters`` string is modified in place if it contains space.
     """
     if not isinstance(filters, str):
         raise TypeError("filters must be a string")
+    # We replace all spaces with %20
     filters.replace(' ', '%20')
+    # These steps will check that the filters are correct
+    REL = ['sartswith', 'endswith', 'exact', 'contains', 'range', 'gt', 'lt', 'gte', 'lte', 'in']
+    filters = filters.split('&')
+    for fi in filters:
+        if not '=' in fi:
+            raise ValueError("Filter "+fi+" is invalid (no =)")
+        if not '__' in fi:
+            raise ValueError("Filter "+fi+" is invalid (no __)")
+        splitted_filter = fi.split('=')
+        match = splitted_filter[0]
+        target = splitted_filter[1]
+        request = match.split('__')
+        relationship = request[len(request)-1]
+        if not relationship in REL:
+            raise ValueError("Filter "+fi+" is invalid ("+ relationship +" is not a valid relationship)")
+    if len(filters) == 1 :
+        return filters
+    else :
+        return '&'.join(filters)
+

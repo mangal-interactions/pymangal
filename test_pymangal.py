@@ -143,6 +143,15 @@ class list_test(unittest.TestCase):
     def test_filters_space_replaced(self):
         assert isinstance(self.mg.List('taxa', 'name__contains=s b'), dict)
 
+    def test_filters_valid_relationship(self):
+        self.assertRaises(ValueError, lambda : self.mg.List('taxa', 'name__islike=Lame'))
+
+    def test_filters_valid_structure(self):
+        self.assertRaises(ValueError, lambda : self.mg.List('taxa', 'name__contains=a&name_endswith=s'))
+
+    def test_filters_has_equal_sign(self):
+        self.assertRaises(ValueError, lambda : self.mg.List('taxa', 'name__contains_i'))
+
     def test_resource_available(self):
         self.assertRaises(ValueError, lambda : self.mg.List('TAXA'))
 
