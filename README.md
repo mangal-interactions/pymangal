@@ -9,7 +9,6 @@ documentation is here: <http://pymangal.readthedocs.org/en/latest/>
 
 In no particular order
 
-- Update the documentation to reflect auth using API key instead of password
 - `networkx` export
 - `Patch` method
 - Automated handling of `related` fields (append `prefix`)

@@ -67,7 +67,7 @@ def check_filters(filters):
     # We replace all spaces with %20
     filters.replace(' ', '%20')
     # These steps will check that the filters are correct
-    REL = ['sartswith', 'endswith', 'exact', 'contains', 'range', 'gt', 'lt', 'gte', 'lte', 'in']
+    REL = ['startswith', 'endswith', 'exact', 'contains', 'range', 'gt', 'lt', 'gte', 'lte', 'in']
     filters = filters.split('&')
     for fi in filters:
         if not '=' in fi:
