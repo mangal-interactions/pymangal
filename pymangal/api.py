@@ -103,6 +103,20 @@ class mangal:
                     raise ValueError("No user with this name")
                 self.owner = self.suffix + 'user/' + str(user_objects[0]['id']) + '/'
 
+    def __str__(self):
+        """Returns a string representation of the ``mangal`` object
+
+        This allow users to see the URL of the server they work on, and
+        if logged in, their username.
+        """
+        repr = "Mangal API connector\n"
+        repr+= "URL: "+self.root
+        if self.auth:
+            repr+= "\n"
+            repr+= "Logged in as "
+            repr+= self.params['username']
+            repr+="\n"
+        return repr
 
     def List(self, resource='dataset', filters=None, page=10, offset=0):
         """ Lists all objects of a given resource type, according to a filter
