@@ -217,3 +217,44 @@ class mangal:
         else :
             print post_request.json()
             raise ValueError("The request failed with status code "+str(post_request.status_code))
+
+    def Patch(self, resource='taxa', data=None):
+        """ Patch a resource in the database
+
+        :param resource: The type of object to post
+        :param data: The dict representation of the object
+
+        The value of the ``owner`` field will be preserved, i.e.
+        the owner of the object is not changed when patching the
+        data object. This is important for users to find back the objects they
+        uploaded even though they have been curated.
+
+        This method converts the fields values to URIs automatically
+
+        If the request is successful, this method will return the newly created
+        object. If not, it will print the reply from the server and fail.
+
+        """
+        check_upload_res(self, resource, data)
+        post_url = self.url + resource + '/'
+        ## We need to check that for each relation, the key is
+        ## replaced by suffix + resource + key
+        for k in [x for x in data.keys() if not x == 'owner']:
+            if self.field_names.has_key(k):
+                fname = self.field_names[k]
+            else :
+                fname = k
+            if 'URI' in self.schemes[resource]['properties'][k]['description']:
+                if self.schemes[resource]['properties'][k]['type'] == 'array':
+                    data[k] = map(lambda x: self.suffix + fname + '/' + x + '/', data[k])
+                else :
+                    data[k] = self.suffix + fname + '/' + data[k] + '/'
+        ## We need to transform the owner as its URI
+        ##
+        payload = json.dumps(data)
+        post_request = re.patch(post_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
+        if post_request.status_code == 202 :
+            return post_request.json()
+        else :
+            print post_request.json()
+            raise ValueError("The request failed with status code "+str(post_request.status_code))
