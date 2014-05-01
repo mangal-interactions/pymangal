@@ -238,10 +238,10 @@ class mangal:
         :param resource: The type of object to post
         :param data: The dict representation of the object
 
-        The value of the ``owner`` field will be preserved, i.e.
-        the owner of the object is not changed when patching the
-        data object. This is important for users to find back the objects they
-        uploaded even though they have been curated.
+        The value of the ``owner`` field will be preserved, i.e.  the owner
+        of the object is not changed when patching the data object. This
+        is important for users to find back the objects they uploaded even
+        though they have been curated.
 
         This method converts the fields values to URIs automatically
 
