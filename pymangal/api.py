@@ -194,6 +194,7 @@ class mangal:
             raise ValueError("There is no object with this identifier")
         if not get_request.status_code == 200 :
             raise ValueError("Request failed with status code "+str(get_request.status_code))
+        # TODO check with the scheme!!!
         return get_request.json()
 
     def Post(self, resource='taxa', data=None):

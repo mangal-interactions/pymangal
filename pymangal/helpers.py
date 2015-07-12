@@ -1,5 +1,7 @@
 import requests as re
 
+# TODO Documentation!
+
 def uri_from_username(api, username):
     # TODO CHECKS!!!
     user_url = api.url + 'user' + "?username__exact=" + username
