@@ -85,4 +85,3 @@ def check_filters(filters):
         return filters
     else :
         return '&'.join(filters)
-

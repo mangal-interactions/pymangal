@@ -11,7 +11,7 @@ class mangal:
     an object with all methods and attributes required to interact with
     the database.
 
-    :param url: The URL of the site with the API (default: ``http://mangal.uqar.ca``)
+    :param url: The URL of the site with the API (default: ``http://mangal.io``)
     :param suffix: The suffix of the API (default: ``/api/v1/``)
     :param usr: Your username on the server (default: ``None``)
     :param key: Your API key on the server (default: ``None``)
@@ -20,7 +20,7 @@ class mangal:
 
     """
 
-    def __init__(self, url='http://mangal.uqar.ca', suffix='/api/v1/', usr=None, key=None):
+    def __init__(self, url='http://mangal.io', suffix='/api/v1/', usr=None, key=None):
         """Creates an instance of a ``mangal`` class
 
         """
