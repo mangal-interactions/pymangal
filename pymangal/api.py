@@ -214,18 +214,9 @@ class mangal:
         """
         check_upload_res(self, resource, data)
         post_url = self.url + resource + '/'
-        ## We need to check that for each relation, the key is
-        ## replaced by suffix + resource + key
-        for k in [x for x in data.keys() if not x == 'owner']:
-            if self.field_names.has_key(k):
-                fname = self.field_names[k]
-            else :
-                fname = k
-            if 'URI' in self.schemes[resource]['properties'][k]['description']:
-                if self.schemes[resource]['properties'][k]['type'] == 'array':
-                    data[k] = map(lambda x: self.suffix + fname + '/' + x + '/', data[k])
-                else :
-                    data[k] = self.suffix + fname + '/' + data[k] + '/'
+        # Keys to URIs
+        data = keys_to_uri(self, resource, data)
+        # Then, posting
         payload = json.dumps(data)
         post_request = re.post(post_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
         if post_request.status_code == 201 :
@@ -254,17 +245,8 @@ class mangal:
         data = prepare_data_for_patching(self, resource, data)
         check_upload_res(self, resource, data)
         patch_url = self.url + resource + '/' + str(data['id']) + '/'
-        # We need to check that for each relation, the key is replaced by suffix + resource + key
-        for k in [x for x in data.keys() if not x == 'owner']:
-            if self.field_names.has_key(k):
-                fname = self.field_names[k]
-            else :
-                fname = k
-            if 'URI' in self.schemes[resource]['properties'][k]['description']:
-                if self.schemes[resource]['properties'][k]['type'] == 'array':
-                    data[k] = map(lambda x: self.suffix + fname + '/' + x + '/', data[k])
-                else :
-                    data[k] = self.suffix + fname + '/' + data[k] + '/'
+        # Keys to URIs
+        data = keys_to_uri(self, resource, data)
         # Then, patching
         payload = json.dumps(data)
         patch_request = re.patch(patch_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
