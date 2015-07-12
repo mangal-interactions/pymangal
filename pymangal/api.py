@@ -3,6 +3,8 @@ from jsonschema import validate
 import requests as re
 from makeschema import makeschema
 from checks import *
+from helpers import *
+
 
 class mangal:
     """Creates an object of class ``mangal``
@@ -235,7 +237,7 @@ class mangal:
     def Patch(self, resource='taxa', data=None):
         """ Patch a resource in the database
 
-        :param resource: The type of object to post
+        :param resource: The type of object to patch
         :param data: The dict representation of the object
 
         The value of the ``owner`` field will be preserved, i.e.  the owner
@@ -249,10 +251,10 @@ class mangal:
         object. If not, it will print the reply from the server and fail.
 
         """
+        data = prepare_data_for_patching(self, resource, data)
         check_upload_res(self, resource, data)
-        post_url = self.url + resource + '/'
-        ## We need to check that for each relation, the key is
-        ## replaced by suffix + resource + key
+        patch_url = self.url + resource + '/' + str(data['id']) + '/'
+        # We need to check that for each relation, the key is replaced by suffix + resource + key
         for k in [x for x in data.keys() if not x == 'owner']:
             if self.field_names.has_key(k):
                 fname = self.field_names[k]
@@ -263,12 +265,11 @@ class mangal:
                     data[k] = map(lambda x: self.suffix + fname + '/' + x + '/', data[k])
                 else :
                     data[k] = self.suffix + fname + '/' + data[k] + '/'
-        ## We need to transform the owner as its URI
-        ##
+        # Then, patching
         payload = json.dumps(data)
-        post_request = re.patch(post_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
-        if post_request.status_code == 202 :
-            return post_request.json()
+        patch_request = re.patch(patch_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
+        if patch_request.status_code == 202 :
+            return patch_request.json()
         else :
-            print post_request.json()
-            raise ValueError("The request failed with status code "+str(post_request.status_code))
+            print patch_request.json()
+            raise ValueError("The request failed with status code "+str(patch_request.status_code))

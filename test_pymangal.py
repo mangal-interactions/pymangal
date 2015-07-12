@@ -9,13 +9,14 @@ from pymangal import checks
 
 # These are testing user informations
 # Anything written by this user will be destroyed
+URL = 'http://mangal.uqar.ca'
 USER = 'test_user'
 KEY = '2ab887fd3857bdfb1de9d80999a89a4dd57a1292'
 
 class api_test(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = 'http://mangal.uqar.ca'
+        self.base_url = URL
 
     def test_trailing_slash(self):
         assert api.mangal(url=self.base_url+'/').root == self.base_url
