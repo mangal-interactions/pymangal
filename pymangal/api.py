@@ -93,7 +93,7 @@ class mangal:
             if not 'allowed_detail_http_methods' in schema_request.json():
                 raise KeyError("The API do not give a list of allowed methods")
             allowed_verbs[resource] = schema_request.json()['allowed_detail_http_methods']
-            self.schemes[resource] = makeschema(schema_request.json(), name=str(resource))
+            self.schemes[resource] = makeschema(schema_request.json(), name=str(resource), title="Schema for "+str(resource)+" objects")
         self.verbs = allowed_verbs
         # We get the URI of the user
         if self.auth:
