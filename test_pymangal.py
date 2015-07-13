@@ -9,9 +9,9 @@ from pymangal import checks
 
 # These are testing user informations
 # Anything written by this user will be destroyed
-URL = 'http://mangal.uqar.ca'
-USER = 'test_user'
-KEY = '2ab887fd3857bdfb1de9d80999a89a4dd57a1292'
+URL = 'http://mangal.io:8080'
+USER = 'test'
+KEY = '9d00823baa5be60d788d079143d9785a4ffd3eec'
 
 class api_test(unittest.TestCase):
 
@@ -70,7 +70,7 @@ class check_test(unittest.TestCase):
         self.mg = api.mangal()
 
     def test_check_res_bad_api(self):
-        self.assertRaises(TypeError, lambda : checks.check_resource_arg('http://mangal.uqar.ca', 'taxa'))
+        self.assertRaises(TypeError, lambda : checks.check_resource_arg(URL, 'taxa'))
 
     def test_check_res_no_str(self):
         self.assertRaises(TypeError, lambda : checks.check_resource_arg(self.mg, 4))
