@@ -119,6 +119,24 @@ class post_test(unittest.TestCase):
         self.assertRaises(ValueError, lambda : self.mg_auth.Post('taxa', self.taxa))
         re.delete(self.mg_auth.root + ccarc['resource_uri'])
 
+## Tests the .Patch() function
+class patch_test(unittest.TestCase):
+
+    def setUp(self):
+        self.url = os.environ.get('mg_test_url','http://mangal.io:8080')
+        self.usr = os.environ.get('mg_test_usr','test')
+        self.key = os.environ.get('mg_test_key','9d00823baa5be60d788d079143d9785a4ffd3eec')
+        self.mg = api.mangal(self.url)
+        self.mg_auth = api.mangal(self.url, usr=self.usr, key=self.key)
+        self.taxa = {'name': 'Carcharodon carcharias', 'vernacular': 'Great white shark', 'status': 'confirmed'}
+        self.eol = 213726
+
+    def test_patch_taxa(self):
+        ccarc = self.mg_auth.Post('taxa', self.taxa)
+        ccarc['eol'] = self.eol
+        ccarc = self.mg_auth.Patch('taxa', ccarc)
+        assert ccarc['eol'] == self.eol
+        re.delete(self.mg_auth.root + ccarc['resource_uri'])
 
 ## Tests the .Get() function
 class get_test(unittest.TestCase):
@@ -225,7 +243,7 @@ class list_test(unittest.TestCase):
     def test_offset_badvalue(self):
         self.assertRaises(ValueError, lambda : self.mg.List('dataset', offset=-1))
 
-## Tests the makeschema function
+# Tests the makeschema function
 class makeschema_test(unittest.TestCase):
 
     def test_wrong_title(self):
@@ -240,6 +258,7 @@ class makeschema_test(unittest.TestCase):
     def test_wrong_data_format(self):
         self.assertRaises(TypeError, lambda : makeschema([], 'name', 'description'))
 
+# Tests the helpers
 class helpers_test(unittest.TestCase):
 
     def setUp(self):
