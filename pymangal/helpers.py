@@ -8,7 +8,7 @@ def uri_from_username(api, username):
     :param api: An API object
     :param username: The username for which you want the URI, as a string
 
-    :returns: The URI as a string, and raises ``ValueError``s if there is no known user, ``TypeError`` if the arguments are not in the correct type.
+    :returns: The URI as a string, and raises ``ValueError`` if there is no known user, ``TypeError`` if the arguments are not in the correct type.
     """
     # TODO CHECKS!!!
     if not isinstance(username, str):
