@@ -220,8 +220,8 @@ class mangal:
         object. If not, it will print the reply from the server and fail.
 
         """
-        data = prepare_data_for_posting(self, resource, data)
         check_upload_res(self, resource, data)
+        data = prepare_data_for_posting(self, resource, data)
         post_url = self.url + resource + '/'
         # Keys to URIs
         data = keys_to_uri(self, resource, data)
@@ -229,10 +229,9 @@ class mangal:
         payload = json.dumps(data)
         post_request = re.post(post_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
         if post_request.status_code == 201 :
-            return post_request.json()
+            return check_data_from_api(self, resource, post_request.json())
         else :
-            print post_request.json()
-            raise ValueError("The request failed with status code "+str(post_request.status_code))
+            raise ValueError("The request failed with status code "+str(post_request.status_code)+":"+post_request.json()['error_message'])
 
     def Patch(self, resource='taxa', data=None):
         """ Patch a resource in the database
@@ -251,9 +250,9 @@ class mangal:
         object. If not, it will print the reply from the server and fail.
 
         """
+        check_upload_res(self, resource, data)
         data = prepare_data_for_posting(self, resource, data)
         data = prepare_data_for_patching(self, resource, data)
-        check_upload_res(self, resource, data)
         if 'resource_uri' in data.keys():
             patch_url = self.root + data['resource_uri']
         else:

@@ -1,7 +1,8 @@
 import pymangal
-import sys
+import sys, os
 import unittest
 from jsonschema import validate, ValidationError
+import requests as re
 
 from pymangal import api
 from pymangal import makeschema
@@ -10,19 +11,21 @@ from pymangal import checks
 class api_test(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = URL
+        self.url = os.environ.get('mg_test_url','http://mangal.io:8080')
+        self.usr = os.environ.get('mg_test_usr','test')
+        self.key = os.environ.get('mg_test_key','9d00823baa5be60d788d079143d9785a4ffd3eec')
 
     def test_trailing_slash(self):
-        assert api.mangal(url=self.base_url+'/').root == self.base_url
+        assert api.mangal(url=self.url+'/').root == self.url
 
     def test_suffix_no_slash(self):
-        assert api.mangal(url=self.base_url, suffix='api/v1').root == self.base_url
+        assert api.mangal(url=self.url, suffix='api/v1').root == self.url
 
     def test_suffix_no_leading_slash(self):
-        assert api.mangal(url=self.base_url, suffix='api/v1/').root == self.base_url
+        assert api.mangal(url=self.url, suffix='api/v1/').root == self.url
 
     def test_suffix_no_trailing_slash(self):
-        assert api.mangal(url=self.base_url, suffix='/api/v1').root == self.base_url
+        assert api.mangal(url=self.url, suffix='/api/v1').root == self.url
 
     def test_URL_is_a_string(self):
         self.assertRaises(TypeError, lambda : api.mangal(url=4))
@@ -31,19 +34,19 @@ class api_test(unittest.TestCase):
         self.assertRaises(ValueError, lambda : api.mangal(url='http://t.co/'))
 
     def test_if_usr_then_key(self):
-        self.assertRaises(ValueError, lambda : api.mangal(usr=USER))
+        self.assertRaises(ValueError, lambda : api.mangal(usr=self.usr))
 
     def test_if_key_then_usr(self):
-        self.assertRaises(ValueError, lambda : api.mangal(key=KEY))
+        self.assertRaises(ValueError, lambda : api.mangal(key=self.key))
 
     def test_usr_is_a_string(self):
-        self.assertRaises(TypeError, lambda : api.mangal(usr=4, key=KEY))
+        self.assertRaises(TypeError, lambda : api.mangal(usr=4, key=self.key))
 
     def test_key_is_a_string(self):
-        self.assertRaises(TypeError, lambda : api.mangal(usr=USER, key=4))
+        self.assertRaises(TypeError, lambda : api.mangal(usr=self.usr, key=4))
 
     def test_correct_username(self):
-        self.assertRaises(ValueError, lambda : api.mangal(usr='user', key=KEY))
+        self.assertRaises(ValueError, lambda : api.mangal(usr='user', key=self.key))
 
     def test_minimal_elements_in_resources(self):
         mg = api.mangal()
@@ -53,8 +56,7 @@ class api_test(unittest.TestCase):
         assert 'interaction' in mg.resources
 
     def test_allowed_verbs(self):
-        mg = api.mangal(url=URL)
-        print mg
+        mg = api.mangal(url=self.url)
         for verb in ['get', 'post', 'patch']:
             assert verb in mg.verbs['taxa']
 
@@ -62,10 +64,13 @@ class api_test(unittest.TestCase):
 class check_test(unittest.TestCase):
 
     def setUp(self):
-        self.mg = api.mangal()
+        self.url = os.environ.get('mg_test_url','http://mangal.io:8080')
+        self.usr = os.environ.get('mg_test_usr','test')
+        self.key = os.environ.get('mg_test_key','9d00823baa5be60d788d079143d9785a4ffd3eec')
+        self.mg = api.mangal(self.url)
 
     def test_check_res_bad_api(self):
-        self.assertRaises(TypeError, lambda : checks.check_resource_arg(URL, 'taxa'))
+        self.assertRaises(TypeError, lambda : checks.check_resource_arg(self.url, 'taxa'))
 
     def test_check_res_no_str(self):
         self.assertRaises(TypeError, lambda : checks.check_resource_arg(self.mg, 4))
@@ -73,13 +78,16 @@ class check_test(unittest.TestCase):
     def test_check_res_no_res(self):
         self.assertRaises(ValueError, lambda : checks.check_resource_arg(self.mg, 'taxon'))
 
-
 ## Tests the .Post() function
 class post_test(unittest.TestCase):
 
     def setUp(self):
-        self.mg = api.mangal()
-        self.mg_auth = api.mangal(usr=USER, key=KEY)
+        self.url = os.environ.get('mg_test_url','http://mangal.io:8080')
+        self.usr = os.environ.get('mg_test_usr','test')
+        self.key = os.environ.get('mg_test_key','9d00823baa5be60d788d079143d9785a4ffd3eec')
+        self.mg = api.mangal(self.url)
+        self.mg_auth = api.mangal(self.url, usr=self.usr, key=self.key)
+        self.taxa = {'name': 'Carcharodon carcharias', 'vernacular': 'Great white shark', 'eol': 213726, 'status': 'confirmed'}
 
     def test_no_auth(self):
         self.assertRaises(ValueError, lambda : self.mg.Post())
@@ -98,6 +106,18 @@ class post_test(unittest.TestCase):
 
     def test_resource_available(self):
         self.assertRaises(ValueError, lambda : self.mg_auth.Post(resource='TAXA', data = {}))
+
+    def test_send_good_taxa(self):
+        ccarc = self.mg_auth.Post('taxa', self.taxa)
+        assert type(ccarc['id']) is int
+        assert ccarc['name'] == self.taxa['name']
+        re.delete(self.mg_auth.root + ccarc['resource_uri'])
+
+    def test_send_duplicate_taxa(self):
+        ccarc = self.mg_auth.Post('taxa', self.taxa)
+        self.assertRaises(ValueError, lambda : self.mg_auth.Post('taxa', self.taxa))
+        re.delete(self.mg_auth.root + ccarc['resource_uri'])
+
 
 ## Tests the .Get() function
 class get_test(unittest.TestCase):
@@ -214,6 +234,9 @@ def main():
     print "Testing on host "+URL+"\n"
     USER = 'test'
     KEY = '9d00823baa5be60d788d079143d9785a4ffd3eec'
+    os.environ['mg_test_url'] = URL
+    os.environ['mg_test_usr'] = USER
+    os.environ['mg_test_key'] = KEY
     if sys.version_info[1] < 7 :
         unittest.main()
     else :
