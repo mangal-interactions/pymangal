@@ -34,10 +34,11 @@ are mostly intended for people wanting to know *how the sausage is made*
 (with heavy chucks of JSON).
 
 .. toctree::
-   :maxdepth: 1
+  :maxdepth: 1
 
-   pymangal.rst
-   checks.rst
+  pymangal.rst
+  checks.rst
+  helpers.rst
 
 Indices and tables
 ==================
