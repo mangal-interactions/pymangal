@@ -217,7 +217,7 @@ class list_test(unittest.TestCase):
 
     def test_page_all(self):
         obj = []
-        for i in xrange(1:50):
+        for i in xrange(50):
             obj[i] = mg_auth.Post('taxa', {'name': 'dummy'+str(i), 'status': 'confirmed'})
         assert isinstance(self.mg.List('dataset', page='all')['objects'], list)
         for o in obj:
