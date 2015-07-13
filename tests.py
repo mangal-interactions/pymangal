@@ -190,35 +190,19 @@ class list_test(unittest.TestCase):
         assert isinstance(self.mg.List('taxa', offset=1), dict)
 
     def test_page_list(self):
-        dummy_1 = self.mg_auth.Post('taxa', {'name': '1', 'status': 'confirmed'})
-        dummy_2 = self.mg_auth.Post('taxa', {'name': '2', 'status': 'confirmed'})
-        dummy_3 = self.mg_auth.Post('taxa', {'name': '3', 'status': 'confirmed'})
-        dummy_4 = self.mg_auth.Post('taxa', {'name': '4', 'status': 'confirmed'})
-        dummy_5 = self.mg_auth.Post('taxa', {'name': '5', 'status': 'confirmed'})
+        obj = [self.mg_auth.Post('taxa', {'name': 'dummy'+str(i), 'status': 'confirmed'}) for i in xrange(5)]
         assert len(self.mg.List('taxa', page=4)['objects']) == 4
-        re.delete(self.mg_auth.root + dummy1['resource_uri'])
-        re.delete(self.mg_auth.root + dummy2['resource_uri'])
-        re.delete(self.mg_auth.root + dummy3['resource_uri'])
-        re.delete(self.mg_auth.root + dummy4['resource_uri'])
-        re.delete(self.mg_auth.root + dummy5['resource_uri'])
+        for o in obj:
+            re.delete(self.mg_auth.root + o['resource_uri'])
 
     def test_page_offset_list(self):
-        dummy_1 = self.mg_auth.Post('taxa', {'name': '1', 'status': 'confirmed'})
-        dummy_2 = self.mg_auth.Post('taxa', {'name': '2', 'status': 'confirmed'})
-        dummy_3 = self.mg_auth.Post('taxa', {'name': '3', 'status': 'confirmed'})
-        dummy_4 = self.mg_auth.Post('taxa', {'name': '4', 'status': 'confirmed'})
-        dummy_5 = self.mg_auth.Post('taxa', {'name': '5', 'status': 'confirmed'})
+        obj = [self.mg_auth.Post('taxa', {'name': 'dummy'+str(i), 'status': 'confirmed'}) for i in xrange(5)]
         assert isinstance(self.mg.List('taxa', offset=1, page=3)['objects'], list)
-        re.delete(self.mg_auth.root + dummy1['resource_uri'])
-        re.delete(self.mg_auth.root + dummy2['resource_uri'])
-        re.delete(self.mg_auth.root + dummy3['resource_uri'])
-        re.delete(self.mg_auth.root + dummy4['resource_uri'])
-        re.delete(self.mg_auth.root + dummy5['resource_uri'])
+        for o in obj:
+            re.delete(self.mg_auth.root + o['resource_uri'])
 
     def test_page_all(self):
-        obj = []
-        for i in xrange(50):
-            obj[i] = self.mg_auth.Post('taxa', {'name': 'dummy'+str(i), 'status': 'confirmed'})
+        obj = [self.mg_auth.Post('taxa', {'name': 'dummy'+str(i), 'status': 'confirmed'}) for i in xrange(50)]
         assert isinstance(self.mg.List('dataset', page='all')['objects'], list)
         for o in obj:
             re.delete(self.mg_auth.root + o['resource_uri'])
