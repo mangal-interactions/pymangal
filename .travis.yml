@@ -1,14 +1,12 @@
 language: python
 python:
-   - "2.7"
-before_install:
-  pip install codecov
+  - "2.7"
 # Dependencies
 install: "pip install -r requirements.txt"
 # Run test
 script:
-   - coverage run --source=pymangal ./tests.py
-   - coverage report -m
+  - coverage run --source=pymangal ./tests.py
+  - coverage report -m
 after_success:
-   coveralls --verbose
-   codecov
+  - codecov --token=5f20180f-8636-43b8-996e-05d159671e07
+  - coveralls --verbose
