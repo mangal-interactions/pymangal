@@ -7,7 +7,7 @@ requirements: requirements.txt
 	$(pip) install -r requirements.txt
 
 test:
-	$(python) test_pymangal.py
+	$(python) tests.py
 
 install:
 	$(python) setup.py install
