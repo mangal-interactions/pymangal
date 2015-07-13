@@ -123,7 +123,11 @@ class post_test(unittest.TestCase):
 class get_test(unittest.TestCase):
 
     def setUp(self):
-        self.mg = api.mangal()
+        self.url = os.environ.get('mg_test_url','http://mangal.io:8080')
+        self.usr = os.environ.get('mg_test_usr','test')
+        self.key = os.environ.get('mg_test_key','9d00823baa5be60d788d079143d9785a4ffd3eec')
+        self.mg = api.mangal(self.url)
+        self.mg_auth = api.mangal(self.url, usr=self.usr, key=self.key)
 
     def test_weird_id_type(self):
         self.assertRaises(TypeError, lambda : self.mg.Get(key = [1, 2]))
@@ -132,23 +136,29 @@ class get_test(unittest.TestCase):
         self.assertRaises(ValueError, lambda : self.mg.Get(key='0'))
 
     def test_id_int_is_ok(self):
-        assert isinstance(self.mg.Get(key=1), dict)
+        dummy_taxa = self.mg_auth.Post('taxa', {'name': 'dummy', 'status': 'trophic species'})
+        assert isinstance(self.mg.Get('taxa', dummy_taxa['id']), dict)
+        re.delete(self.mg_auth.root + dummy_taxa['resource_uri'])
 
-    def test_output_dict(self):
-        assert isinstance(self.mg.Get(key='1'), dict)
-
+    def test_id_str_is_ok(self):
+        dummy_taxa = self.mg_auth.Post('taxa', {'name': 'dummy', 'status': 'trophic species'})
+        assert isinstance(self.mg.Get('taxa', str(dummy_taxa['id'])), dict)
+        re.delete(self.mg_auth.root + dummy_taxa['resource_uri'])
+    
     def test_resource_is_str(self):
         self.assertRaises(TypeError, lambda : self.mg.Get(resource=4))
 
     def test_resource_available(self):
         self.assertRaises(ValueError, lambda : self.mg.Get(resource='TAXA'))
 
-
 ## Tests the .List() function
 class list_test(unittest.TestCase):
 
     def setUp(self):
-        self.mg = api.mangal()
+        self.url = os.environ.get('mg_test_url','http://mangal.io:8080')
+        self.usr = os.environ.get('mg_test_usr','test')
+        self.key = os.environ.get('mg_test_key','9d00823baa5be60d788d079143d9785a4ffd3eec')
+        self.mg = api.mangal(self.url)
 
     def test_resource_is_str(self):
         self.assertRaises(TypeError, lambda : self.mg.List(4))

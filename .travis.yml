@@ -7,7 +7,7 @@ before_install:
 install: "pip install -r requirements.txt"
 # Run test
 script:
-   - coverage run --source=pymangal ./test_pymangal.py
+   - coverage run --source=pymangal ./tests.py
    - coverage report -m
 after_success:
    coveralls --verbose
