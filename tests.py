@@ -144,7 +144,7 @@ class get_test(unittest.TestCase):
         dummy_taxa = self.mg_auth.Post('taxa', {'name': 'dummy', 'status': 'trophic species'})
         assert isinstance(self.mg.Get('taxa', str(dummy_taxa['id'])), dict)
         re.delete(self.mg_auth.root + dummy_taxa['resource_uri'])
-    
+
     def test_resource_is_str(self):
         self.assertRaises(TypeError, lambda : self.mg.Get(resource=4))
 
