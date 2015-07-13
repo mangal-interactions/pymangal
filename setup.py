@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
         name='pymangal',
-        version='0.2.0',
+        version='0.3.0',
         description='A client library for the mangal API',
         author='Timothée Poisot',
         author_email='tim@poisotlab.io',
