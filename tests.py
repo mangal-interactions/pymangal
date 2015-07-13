@@ -90,6 +90,9 @@ class post_test(unittest.TestCase):
         self.mg_auth = api.mangal(self.url, usr=self.usr, key=self.key)
         self.taxa = {'name': 'Carcharodon carcharias', 'vernacular': 'Great white shark', 'eol': 213726, 'status': 'confirmed'}
 
+    def test_str_representation(self):
+        assert self.mg.__str__() == '---------------------------\nMangal API connector\nURL: ' + self.url
+
     def test_no_auth(self):
         self.assertRaises(ValueError, lambda : self.mg.Post())
 
