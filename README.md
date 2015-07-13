@@ -10,7 +10,6 @@ documentation is here: <http://pymangal.readthedocs.org/en/latest/>
 In no particular order
 
 - `networkx` export
-- `Patch` method
 - Automated handling of `related` fields (append `prefix`)
 - `signUp` method
 - Update the documentation ([learn sphinx][ls])

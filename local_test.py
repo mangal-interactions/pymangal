@@ -4,7 +4,6 @@ m = pm.mangal(url='http://localhost:8000', suffix='/api/v1/', usr='test', key='9
 m2 = pm.mangal(url='http://localhost:8000', suffix='/api/v1/', usr='test2', key='300b54877dca81e4b2f1aa8a112c288ccc97f919')
 
 # Test taxa
-
 def create_taxa(api, data):
     filt = 'name__exact=' + data['name']
     matches = api.List('taxa', filters=filt)
