@@ -3,6 +3,8 @@ from jsonschema import validate
 import requests as re
 from makeschema import makeschema
 from checks import *
+from helpers import *
+
 
 class mangal:
     """Creates an object of class ``mangal``
@@ -11,7 +13,7 @@ class mangal:
     an object with all methods and attributes required to interact with
     the database.
 
-    :param url: The URL of the site with the API (default: ``http://mangal.uqar.ca``)
+    :param url: The URL of the site with the API (default: ``http://mangal.io``)
     :param suffix: The suffix of the API (default: ``/api/v1/``)
     :param usr: Your username on the server (default: ``None``)
     :param key: Your API key on the server (default: ``None``)
@@ -20,7 +22,7 @@ class mangal:
 
     """
 
-    def __init__(self, url='http://mangal.uqar.ca', suffix='/api/v1/', usr=None, key=None):
+    def __init__(self, url='http://mangal.io', suffix='/api/v1/', usr=None, key=None):
         """Creates an instance of a ``mangal`` class
 
         """
@@ -91,7 +93,7 @@ class mangal:
             if not 'allowed_detail_http_methods' in schema_request.json():
                 raise KeyError("The API do not give a list of allowed methods")
             allowed_verbs[resource] = schema_request.json()['allowed_detail_http_methods']
-            self.schemes[resource] = makeschema(schema_request.json(), name=str(resource))
+            self.schemes[resource] = makeschema(schema_request.json(), name=str(resource), title="Schema for "+str(resource)+" objects")
         self.verbs = allowed_verbs
         # We get the URI of the user
         if self.auth:
@@ -103,6 +105,20 @@ class mangal:
                     raise ValueError("No user with this name")
                 self.owner = self.suffix + 'user/' + str(user_objects[0]['id']) + '/'
 
+    def __str__(self):
+        """Returns a string representation of the ``mangal`` object
+
+        This allow users to see the URL of the server they work on, and
+        if logged in, their username.
+        """
+        repr = "---------------------------\nMangal API connector\n"
+        repr+= "URL: "+self.root
+        if self.auth:
+            repr+= "\n"
+            repr+= "Logged in as "
+            repr+= self.params['username']
+            repr+="\n---------------------------\n"
+        return repr
 
     def List(self, resource='dataset', filters=None, page=10, offset=0):
         """ Lists all objects of a given resource type, according to a filter
@@ -116,7 +132,10 @@ class mangal:
 
         .. note::
 
-            The ``objects`` key of the returned dictionary is a ``list`` of ``dict``, each being a record in the database. The ``meta`` key contains the ``next`` and ``previous`` urls, and the ``total_count`` number of objects for the request.
+            The ``objects`` key of the returned dictionary is a ``list`` of
+            ``dict``, each being a record in the database. The ``meta`` key
+            contains the ``next`` and ``previous`` urls, and the ``total_count``
+            number of objects for the request.
 
         """
         list_objects = []
@@ -141,7 +160,7 @@ class mangal:
             off_pages = "limit="+str(page)+"&offset="+str(offset)
             if filters == None :
                 filters = off_pages
-            else :
+            else:
                 filters = off_pages + '&' + filters
         if not filters == None :
             list_url += '?' + filters
@@ -151,12 +170,14 @@ class mangal:
         list_content = list_request.json()
         if not list_content.has_key('objects'):
             raise KeyError('Badly formatted reply')
-        list_objects += list_content['objects']
+        for obj in list_content['objects']:
+            list_objects.append(check_data_from_api(self, resource, obj))
         if page == 'all':
             while not list_content['meta']['next'] == None :
                 list_request = re.get(self.root + list_content['meta']['next'], params=self.params)
                 list_content = list_request.json()
-                list_objects += list_content['objects']
+                for obj in list_content['objects']:
+                    list_objects.append(check_data_from_api(self, resource, obj))
         return {'meta': list_content['meta'], 'objects': list_objects}
 
     def Get(self, resource='dataset', key='1'):
@@ -178,7 +199,10 @@ class mangal:
             raise ValueError("There is no object with this identifier")
         if not get_request.status_code == 200 :
             raise ValueError("Request failed with status code "+str(get_request.status_code))
-        return get_request.json()
+        # TODO check with the scheme!!!
+        data = get_request.json()
+        data = check_data_from_api(self, resource, data)
+        return data
 
     def Post(self, resource='taxa', data=None):
         """ Post a resource to the database
@@ -196,24 +220,48 @@ class mangal:
         object. If not, it will print the reply from the server and fail.
 
         """
-        check_upload_res(self, resource, data)
+        data = check_upload_res(self, resource, data)
         post_url = self.url + resource + '/'
-        ## We need to check that for each relation, the key is
-        ## replaced by suffix + resource + key
-        for k in [x for x in data.keys() if not x == 'owner']:
-            if self.field_names.has_key(k):
-                fname = self.field_names[k]
-            else :
-                fname = k
-            if 'URI' in self.schemes[resource]['properties'][k]['description']:
-                if self.schemes[resource]['properties'][k]['type'] == 'array':
-                    data[k] = map(lambda x: self.suffix + fname + '/' + x + '/', data[k])
-                else :
-                    data[k] = self.suffix + fname + '/' + data[k] + '/'
+        # Keys to URIs
+        data = keys_to_uri(self, resource, data)
+        # Then, posting
         payload = json.dumps(data)
         post_request = re.post(post_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
         if post_request.status_code == 201 :
-            return post_request.json()
+            return check_data_from_api(self, resource, post_request.json())
         else :
-            print post_request.json()
-            raise ValueError("The request failed with status code "+str(post_request.status_code))
+            raise ValueError("The request failed with status code "+str(post_request.status_code)+":"+post_request.json()['error_message'])
+
+    def Patch(self, resource='taxa', data=None):
+        """ Patch a resource in the database
+
+        :param resource: The type of object to patch
+        :param data: The dict representation of the object
+
+        The value of the ``owner`` field will be preserved, i.e.  the owner
+        of the object is not changed when patching the data object. This
+        is important for users to find back the objects they uploaded even
+        though they have been curated.
+
+        This method converts the fields values to URIs automatically.
+
+        If the request is successful, this method will return the newly created
+        object. If not, it will print the reply from the server and fail.
+
+        """
+        data = check_upload_res(self, resource, data)
+        data = prepare_data_for_patching(self, resource, data)
+        if 'resource_uri' in data.keys():
+            patch_url = self.root + data['resource_uri']
+        else:
+            patch_url = self.url + resource + '/' + str(data['id']) + '/'
+        # Keys to URIs
+        data = keys_to_uri(self, resource, data)
+        # Then, patching
+        payload = json.dumps(data)
+        patch_request = re.patch(patch_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
+        if patch_request.status_code == 202 :
+            return check_data_from_api(self, resource, patch_request.json())
+        else :
+            print patch_request.json()
+            raise ValueError("The request failed with status code "+str(patch_request.status_code))

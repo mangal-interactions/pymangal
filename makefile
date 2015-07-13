@@ -1,5 +1,5 @@
-python = python2
-pip = pip2
+python = python
+pip = pip
 
 all: requirements test install
 
@@ -11,4 +11,3 @@ test:
 
 install:
 	$(python) setup.py install
-

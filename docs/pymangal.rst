@@ -13,4 +13,3 @@ Documentation
 
 .. autoclass:: mangal
    :members:
-
