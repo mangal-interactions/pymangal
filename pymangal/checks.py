@@ -28,7 +28,7 @@ def check_upload_res(api, resource, data):
     :param resource: A resource argument
     :param data: The data to be uploaded. This is supposed to be a dict.
 
-    :returns: Nothing, but fails if something is wrong.
+    :returns: ``data``, with corrections applied if need be.
 
     The first checks are basic:
 
