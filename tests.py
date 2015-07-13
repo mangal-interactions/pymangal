@@ -262,10 +262,13 @@ def main():
                     URL = sys.argv[i+1]
                 del(sys.argv[i+1])
                 del(sys.argv[i])
-
     print "Testing on host "+URL+"\n"
     USER = 'test'
     KEY = '9d00823baa5be60d788d079143d9785a4ffd3eec'
+    ## Cleaning DB
+    mg = api.mangal(URL, usr=USR, key=KEY)
+    re.delete(self.mg_auth.root + '/api/v1/taxa/')
+    ##
     os.environ['mg_test_url'] = URL
     os.environ['mg_test_usr'] = USER
     os.environ['mg_test_key'] = KEY
