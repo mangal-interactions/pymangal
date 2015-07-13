@@ -7,6 +7,7 @@ import requests as re
 from pymangal import api
 from pymangal import makeschema
 from pymangal import checks
+from pymangal import helpers
 
 class api_test(unittest.TestCase):
 
@@ -228,6 +229,17 @@ class makeschema_test(unittest.TestCase):
 
     def test_wrong_data_format(self):
         self.assertRaises(TypeError, lambda : makeschema([], 'name', 'description'))
+
+class helpers_test(unittest.TestCase):
+
+    def setUp(self):
+        self.url = os.environ.get('mg_test_url','http://mangal.io:8080')
+        self.usr = os.environ.get('mg_test_usr','test')
+        self.key = os.environ.get('mg_test_key','9d00823baa5be60d788d079143d9785a4ffd3eec')
+        self.mg = api.mangal(self.url)
+
+    def test_uri_from_username(self):
+        assert uri_from_username(self.mg, 'test') == '/api/v1/user/1/'
 
 def main():
     URL = 'http://mangal.io:8080'
