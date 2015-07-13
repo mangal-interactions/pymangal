@@ -141,6 +141,14 @@ class patch_test(unittest.TestCase):
         assert ccarc['eol'] == self.eol
         re.delete(self.mg_auth.root + ccarc['resource_uri'])
 
+    def test_patch_taxa_if_no_uri(self):
+        ccarc = self.mg_auth.Post('taxa', self.taxa)
+        ccarc['eol'] = self.eol
+        ccarc.pop('resource_uri', None)
+        ccarc = self.mg_auth.Patch('taxa', ccarc)
+        assert ccarc['eol'] == self.eol
+        re.delete(self.mg_auth.root + ccarc['resource_uri'])
+
 ## Tests the .Get() function
 class get_test(unittest.TestCase):
 
