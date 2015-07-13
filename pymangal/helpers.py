@@ -3,7 +3,16 @@ import requests as re
 # TODO Documentation -- docstrings
 
 def uri_from_username(api, username):
+    """Returns a URI from a username
+
+    :param api: An API object
+    :param username: The username for which you want the URI, as a string
+
+    :returns: The URI as a string, and raises ``ValueError``s if there is no known user, ``TypeError`` if the arguments are not in the correct type.
+    """
     # TODO CHECKS!!!
+    if not isinstance(username, str):
+        raise TypeError("The username should be given as a string.")
     user_url = api.url + 'user' + "?username__exact=" + username
     user_request = re.get(user_url, params=api.params)
     if user_request.status_code == 200 :

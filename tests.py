@@ -287,6 +287,9 @@ class helpers_test(unittest.TestCase):
     def test_uri_from_username_with_no_user(self):
         self.assertRaises(ValueError, lambda : helpers.uri_from_username(self.mg, 'NoSuchUser'))
 
+    def test_uri_from_username_wants_str(self):
+        self.assertRaises(TypeError, lambda : helpers.uri_from_username(self.mg, 4))
+
 
 def main():
     URL = 'http://mangal.io:8080'
