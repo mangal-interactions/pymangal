@@ -4,13 +4,18 @@ m = pm.mangal(url='http://localhost:8000', suffix='/api/v1/', usr='test', key='9
 m2 = pm.mangal(url='http://localhost:8000', suffix='/api/v1/', usr='test2', key='300b54877dca81e4b2f1aa8a112c288ccc97f919')
 
 # Test taxa
-leleg = {'name': 'Lamellodiscus elegans', 'status': 'confirmed'}
-filt = "name__exact=" + leleg['name']
-matches = m.List('taxa', filters=filt)
-if matches['meta']['total_count'] == 0:
-    leleg = m.Post('taxa', leleg)
-else:
-    leleg = matches['objects'][0]
+
+def create_taxa(api, data):
+    filt = 'name__exact=' + data['name']
+    matches = api.List('taxa', filters=filt)
+    if matches['meta']['total_count'] == 0:
+        data = m.Post('taxa', data)
+    else:
+        data = matches['objects'][0]
+    return data
+
+leleg = create_taxa(m, {'name': 'Lamellodiscus elegans', 'status': 'confirmed'})
+ligno = create_taxa(m2, {'name': 'Lamellodiscus ignoratus', 'status': 'confirmed'})
 
 leleg['description'] = "Lamellodiscus elegans, a species of the Lamellodiscus genus."
 leleg = m.Patch('taxa', leleg)

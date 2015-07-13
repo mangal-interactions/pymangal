@@ -111,13 +111,13 @@ class mangal:
         This allow users to see the URL of the server they work on, and
         if logged in, their username.
         """
-        repr = "Mangal API connector\n"
+        repr = "---------------------------\nMangal API connector\n"
         repr+= "URL: "+self.root
         if self.auth:
             repr+= "\n"
             repr+= "Logged in as "
             repr+= self.params['username']
-            repr+="\n"
+            repr+="\n---------------------------\n"
         return repr
 
     def List(self, resource='dataset', filters=None, page=10, offset=0):
