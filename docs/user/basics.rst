@@ -4,7 +4,7 @@ pymangal 101
 ============
 
 This document provides an overview of what the ``pymangal`` module can do,
-and more importantly, how to do it. 
+and more importantly, how to do it.
 
 Overview of the module
 ----------------------
@@ -41,7 +41,7 @@ Creating a mangal object
 Almost all of the actions you will do using ``pymangal`` will be done by
 calling various methods of the ``mangal`` class. The usual first step of
 any script is to import the module. ::
-   
+
    >>> import pymangal as pm
    >>> api = pm.mangal()
 
@@ -49,7 +49,7 @@ Calling ``dir(api)`` will give you an overview of the methods and attributes.
 
 APIs conforming to the ``mangal`` specification can expose either all
 resources, or a subset of them. To see which are available, ::
-   
+
    >>> api.resources
 
 For each value in the previously returned list, there is an element of ::

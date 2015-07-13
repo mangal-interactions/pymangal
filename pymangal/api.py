@@ -157,7 +157,7 @@ class mangal:
             off_pages = "limit="+str(page)+"&offset="+str(offset)
             if filters == None :
                 filters = off_pages
-            else :
+            else:
                 filters = off_pages + '&' + filters
         if not filters == None :
             list_url += '?' + filters
@@ -167,12 +167,14 @@ class mangal:
         list_content = list_request.json()
         if not list_content.has_key('objects'):
             raise KeyError('Badly formatted reply')
-        list_objects += list_content['objects']
+        for obj in list_content['objects']:
+            list_objects.append(check_data_from_api(self, resource, obj))
         if page == 'all':
             while not list_content['meta']['next'] == None :
                 list_request = re.get(self.root + list_content['meta']['next'], params=self.params)
                 list_content = list_request.json()
-                list_objects += list_content['objects']
+                for obj in list_content['objects']:
+                    list_objects.append(check_data_from_api(self, resource, obj))
         return {'meta': list_content['meta'], 'objects': list_objects}
 
     def Get(self, resource='dataset', key='1'):
@@ -195,7 +197,9 @@ class mangal:
         if not get_request.status_code == 200 :
             raise ValueError("Request failed with status code "+str(get_request.status_code))
         # TODO check with the scheme!!!
-        return get_request.json()
+        data = get_request.json()
+        data = check_data_from_api(self, resource, data)
+        return data
 
     def Post(self, resource='taxa', data=None):
         """ Post a resource to the database
@@ -213,6 +217,7 @@ class mangal:
         object. If not, it will print the reply from the server and fail.
 
         """
+        data = prepare_data_for_posting(self, resource, data)
         check_upload_res(self, resource, data)
         post_url = self.url + resource + '/'
         # Keys to URIs
@@ -237,22 +242,26 @@ class mangal:
         is important for users to find back the objects they uploaded even
         though they have been curated.
 
-        This method converts the fields values to URIs automatically
+        This method converts the fields values to URIs automatically.
 
         If the request is successful, this method will return the newly created
         object. If not, it will print the reply from the server and fail.
 
         """
+        data = prepare_data_for_posting(self, resource, data)
         data = prepare_data_for_patching(self, resource, data)
         check_upload_res(self, resource, data)
-        patch_url = self.url + resource + '/' + str(data['id']) + '/'
+        if 'resource_uri' in data.keys():
+            patch_url = self.root + data['resource_uri']
+        else:
+            patch_url = self.url + resource + '/' + str(data['id']) + '/'
         # Keys to URIs
         data = keys_to_uri(self, resource, data)
         # Then, patching
         payload = json.dumps(data)
         patch_request = re.patch(patch_url, params=self.params, data=payload, headers = {'content-type': 'application/json'})
         if patch_request.status_code == 202 :
-            return patch_request.json()
+            return check_data_from_api(self, resource, patch_request.json())
         else :
             print patch_request.json()
             raise ValueError("The request failed with status code "+str(patch_request.status_code))

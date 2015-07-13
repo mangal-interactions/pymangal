@@ -12,14 +12,10 @@ if matches['meta']['total_count'] == 0:
 else:
     leleg = matches['objects'][0]
 
-leleg['id'] = int(leleg['id'])
 leleg['description'] = "Lamellodiscus elegans, a species of the Lamellodiscus genus."
-
 leleg = m.Patch('taxa', leleg)
+print leleg['description']
 
-leleg['id'] = int(leleg['id'])
 leleg['description'] = "Awesome! Possum!"
-
 leleg = m2.Patch('taxa', leleg)
-
-print leleg
+print leleg['description']

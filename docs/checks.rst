@@ -12,7 +12,7 @@ Documentation
 
 .. module:: pymangal.checks
 
-.. autofunction:: check_resource_arg 
+.. autofunction:: check_resource_arg
 
 .. autofunction:: check_upload_res
 
