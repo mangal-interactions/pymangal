@@ -315,7 +315,7 @@ def main():
     if sys.version_info[1] < 7 :
         unittest.main()
     else :
-        unittest.main(verbosity=5)
+        unittest.main(verbosity=1)
 
 if __name__ == '__main__':
     main()

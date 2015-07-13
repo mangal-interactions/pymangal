@@ -11,7 +11,7 @@ def uri_from_username(api, username):
     :returns: The URI as a string, and raises ``ValueError`` if there is no known user, ``TypeError`` if the arguments are not in the correct type.
     """
     # TODO CHECKS!!!
-    if not isinstance(username, str):
+    if not type(username) in [str, unicode]:
         raise TypeError("The username should be given as a string.")
     user_url = api.url + 'user' + "?username__exact=" + username
     user_request = re.get(user_url, params=api.params)
