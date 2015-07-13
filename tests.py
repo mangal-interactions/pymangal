@@ -7,12 +7,6 @@ from pymangal import api
 from pymangal import makeschema
 from pymangal import checks
 
-# These are testing user informations
-# Anything written by this user will be destroyed
-URL = 'http://mangal.io:8080'
-USER = 'test'
-KEY = '9d00823baa5be60d788d079143d9785a4ffd3eec'
-
 class api_test(unittest.TestCase):
 
     def setUp(self):
@@ -33,7 +27,7 @@ class api_test(unittest.TestCase):
     def test_URL_is_a_string(self):
         self.assertRaises(TypeError, lambda : api.mangal(url=4))
 
-    def test_Fake_URLs_give_404(self):
+    def test_fake_URLs_give_404(self):
         self.assertRaises(ValueError, lambda : api.mangal(url='http://t.co/'))
 
     def test_if_usr_then_key(self):
@@ -59,7 +53,8 @@ class api_test(unittest.TestCase):
         assert 'interaction' in mg.resources
 
     def test_allowed_verbs(self):
-        mg = api.mangal()
+        mg = api.mangal(url=URL)
+        print mg
         for verb in ['get', 'post', 'patch']:
             assert verb in mg.verbs['taxa']
 
@@ -205,10 +200,24 @@ class makeschema_test(unittest.TestCase):
         self.assertRaises(TypeError, lambda : makeschema([], 'name', 'description'))
 
 def main():
+    URL = 'http://mangal.io:8080'
+    if len(sys.argv) > 1:
+        for i in range(len(sys.argv)-1):
+            if sys.argv[i] in ['-h', '--host']:
+                if sys.argv[i+1] == 'local':
+                    URL = "http://127.0.0.1:8000"
+                else:
+                    URL = sys.argv[i+1]
+                del(sys.argv[i+1])
+                del(sys.argv[i])
+
+    print "Testing on host "+URL+"\n"
+    USER = 'test'
+    KEY = '9d00823baa5be60d788d079143d9785a4ffd3eec'
     if sys.version_info[1] < 7 :
         unittest.main()
     else :
-        unittest.main(verbosity=2)
+        unittest.main(verbosity=5)
 
 if __name__ == '__main__':
     main()
