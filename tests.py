@@ -267,7 +267,7 @@ def main():
     KEY = '9d00823baa5be60d788d079143d9785a4ffd3eec'
     ## Cleaning DB
     mg = api.mangal(URL, usr=USER, key=KEY)
-    re.delete(self.mg_auth.root + '/api/v1/taxa/')
+    re.delete(mg.root + '/api/v1/taxa/')
     ##
     os.environ['mg_test_url'] = URL
     os.environ['mg_test_usr'] = USER
