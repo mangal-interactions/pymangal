@@ -3,11 +3,10 @@
 How to upload data
 ==================
 
-This page will walk you through the upload of a simple food web with
-three species. The goal is to cover the basic mechanisms. Posting
-data requires to be authenticated. Users can register at <
-http://mangal.uqar.ca/dashboard/>. Authentication is done with the username
-and API key.
+This page will walk you through the upload of a simple food web with three
+species. The goal is to cover the basic mechanisms. Posting data requires to be
+authenticated. Users can register at <http://mangal.io/dashboard/>.
+Authentication is done with the username and API key.
 
 To upload data, a good knowledge of the data specification is
 important. ``JSON`` schemes are imported when connecting to the database
@@ -39,9 +38,9 @@ we can now create a population belonging to this taxa: ::
 Example: a linear food chain
 ----------------------------
 
-In this exercice, we'll upload a linear food chain made of a top predator
-(*Canis lupus*), a consumer (*Alces americanus*), and a primary producer
-(*Abies balsamea*).
+In this exercice, we will upload a linear food chain made of a top predator
+(*Canis lupus*), a consumer (*Alces americanus*), and a primary producer (*Abies
+balsamea*).
 
 The first step is to create objects containing the taxa: ::
 

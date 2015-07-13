@@ -26,13 +26,12 @@ Then from within the ``pymangal`` folder, ::
    make test
    make install
 
-Alternatively, ``make all`` will download the requirements, run the tests,
-and install the module. Note that by default, the ``makefile`` calls
-``python2`` and ``pip2``. If your versions of ptyhon 2 and pip are called,
-*e.g.*, ``python27`` and ``pip``, you need to pass them as variable names when
-calling make: ::
+Alternatively, ``make all`` will download the requirements, run the tests, and
+install the module. Note that by default, the ``makefile`` calls ``python`` and
+``pip``. If your versions of python 2 and pip are called, *e.g.*, ``python27``
+and ``pip2``, you need to pass them as variable names when calling make: ::
 
-   make all pip=pip python=python27
+   make all pip=pip2 python=python27
 
 
 Creating a mangal object
@@ -107,11 +106,14 @@ Filtering
 There is a special page on filtering_. When filtering, it is recommended to
 use ``page='all'``, as it will ensure that all matched results are returned.
 
+.. note::
+   Unless you *absolutely* need to get all the data, it makes very little sense to ``List`` all of the database. It is assumed that filters *will* be used most of the time.
+
 Getting a particular resource
 -----------------------------
 
 Getting a particular resource required that you know its type, and its unique
-identifier. For example, getting the ``taxa`` with ``id`` equal to 8 si ::
+identifier. For example, getting the ``taxa`` with ``id`` equal to 8 is ::
 
    >>> taxa_8 = api.Get('taxa', 8)
 
