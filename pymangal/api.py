@@ -220,8 +220,8 @@ class mangal:
         object. If not, it will print the reply from the server and fail.
 
         """
-        check_upload_res(self, resource, data)
         data = prepare_data_for_posting(self, resource, data)
+        check_upload_res(self, resource, data)
         post_url = self.url + resource + '/'
         # Keys to URIs
         data = keys_to_uri(self, resource, data)
@@ -250,9 +250,8 @@ class mangal:
         object. If not, it will print the reply from the server and fail.
 
         """
-        check_upload_res(self, resource, data)
-        data = prepare_data_for_posting(self, resource, data)
         data = prepare_data_for_patching(self, resource, data)
+        check_upload_res(self, resource, data)
         if 'resource_uri' in data.keys():
             patch_url = self.root + data['resource_uri']
         else:
