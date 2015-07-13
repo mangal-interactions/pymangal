@@ -14,20 +14,7 @@ def uri_from_username(api, username):
         # FIXME else what?
         return user_uri
 
-def prepare_data_for_posting(api, resource, data):
-    if isinstance(data, str):
-        raise TypeError("The data must be passed as a dictionary of values")
-    if data == None:
-        raise ValueError("The Post() method requires data to proceed")
-    # Every field which is None is removed
-    for k, v in data.items():
-        if v == None:
-            data.pop(k, None)
-    return data
-
 def prepare_data_for_patching(api, resource, data):
-    data = prepare_data_for_posting(api, resource, data)
-    # Transform the owner into its URI
     original_owner =  data['owner']
     data["owner"] = uri_from_username(api, original_owner)
     return data

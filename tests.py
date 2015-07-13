@@ -281,9 +281,6 @@ class helpers_test(unittest.TestCase):
     def test_uri_from_username(self):
         assert helpers.uri_from_username(self.mg, 'test') == '/api/v1/user/1/'
 
-    def test_prepare_data_for(self):
-        self.assertRaises(ValueError, lambda : helpers.prepare_data_for_posting(self.mg, 'taxa', None))
-        self.assertRaises(TypeError, lambda : helpers.prepare_data_for_posting(self.mg, 'taxa', 'aa'))
 
 def main():
     URL = 'http://mangal.io:8080'

@@ -49,7 +49,12 @@ def check_upload_res(api, resource, data):
         raise TypeError("Data must be in dict format")
     if not data.has_key('owner'):
         data['owner'] = api.owner
+    # Remove fieds that are None
+    for k, v in data.items():
+        if v == None:
+            data.pop(k, None)
     validate(data, api.schemes[resource])
+    return data
 
 def check_filters(filters):
     """Checks that the filters are valid
