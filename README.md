@@ -12,7 +12,6 @@ In no particular order
 - `networkx` export
 - Automated handling of `related` fields (append `prefix`)
 - `signUp` method
-- Update the documentation ([learn sphinx][ls])
 
 # Versionning
 
@@ -49,10 +48,10 @@ db = pymangal.mangal()
 db.List('dataset')
 
 # Returns all datasets
-db.List('dataset', autopage=True)
+db.List('dataset', page='all')
 
 # Returns all taxa matching *vulgaris
-db.List('taxa', filters='name__endswith=vulgaris', autopage=True)
+db.List('taxa', filters='name__endswith=vulgaris', page='all')
 
 # Get the first network
 db.get('network', 1)
@@ -64,8 +63,8 @@ db.get('network', 1)
 # Objects are represented as dict
 taxa = {'name': 'Pisaster ochraceus', 'vernacular': 'purple sea star',
         'status': 'confirmed', 'eol': '598469'}
-# You need to have a username/password to add and patch objects
-db_auth = pymangal.mangal(usr='test', pwd='test')
+# You need to have a username/API key to add and patch objects
+db_auth = pymangal.mangal(usr='test', key='dsdsdsdsdsds')
 taxa = db_auth.Post('taxa', taxa)
 print taxa['id']
 ```

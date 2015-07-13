@@ -33,6 +33,7 @@ class mangal:
         self.suffix = suffix
         self.owner = None
         self.params = {}
+        self.params['client'] = 'pymangal'
         self.auth = False
         # We check that the URL is a string
         if not isinstance(url, str):

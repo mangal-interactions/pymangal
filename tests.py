@@ -206,6 +206,9 @@ class list_test(unittest.TestCase):
     def test_filters_valid_structure(self):
         self.assertRaises(ValueError, lambda : self.mg.List('taxa', 'name__contains=a&name_endswith=s'))
 
+    def test_filters_multiple(self):
+        assert isinstance(self.mg.List('taxa', 'name__contains=a&name__endswith=s'), dict)
+
     def test_filters_has_equal_sign(self):
         self.assertRaises(ValueError, lambda : self.mg.List('taxa', 'name__contains_i'))
 
