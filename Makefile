@@ -9,5 +9,11 @@ requirements: requirements.txt
 test:
 	$(python) tests.py
 
-install:
-	$(python) setup.py install
+.version: pymangal/__init__.py
+	@python .makeversion.py 1>/dev/null 2>/dev/null
+
+setup.py: test
+
+
+install: setup.py
+	$(python) $< $@
