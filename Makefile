@@ -9,14 +9,14 @@ requirements: requirements.txt
 test:
 	$(python) tests.py
 
-.version: pymangal/__init__.py
+.version: .tag pymangal/__init__.py
 	@python .makeversion.py 1>/dev/null 2>/dev/null
 
-.tag: .version
+.tag:
 	@git tag | tail -n 1 > .tag
 
-setup.py: test
-
+setup.py: .tag .version .makesetup.py
+	@python .makesetup.py
 
 install: setup.py
 	$(python) $< $@
