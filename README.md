@@ -5,6 +5,8 @@ documentation is here: <http://pymangal.readthedocs.org/en/latest/>
 
 [![Build Status](https://travis-ci.org/mangal-wg/pymangal.png?branch=master)](https://travis-ci.org/mangal-wg/pymangal) [![Coverage Status](https://coveralls.io/repos/mangal-wg/pymangal/badge.svg?branch=master&service=github)](https://coveralls.io/github/mangal-wg/pymangal?branch=master) [![codecov.io](http://codecov.io/github/mangal-wg/pymangal/coverage.svg?branch=master)](http://codecov.io/github/mangal-wg/pymangal?branch=master) [![Documentation Status](https://readthedocs.org/projects/pymangal/badge/?version=latest)](http://pymangal.readthedocs.org/en/latest/)
 
+**ALL** numbered versions are pushed to PyPI, so you can at all time install with `pip install pymangal`.
+
 # TODO list
 
 In no particular order
