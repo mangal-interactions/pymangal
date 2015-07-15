@@ -9,14 +9,22 @@ requirements: requirements.txt
 test:
 	$(python) tests.py
 
-.version: .tag pymangal/__init__.py
-	@python .makeversion.py 1>/dev/null 2>/dev/null
-
 .tag:
 	@git tag | tail -n 1 > .tag
 
-setup.py: .tag .version .makesetup.py
+.version: .tag pymangal/__init__.py
+	@python .makeversion.py 1>/dev/null 2>/dev/null
+
+setup.py: .version .makesetup.py
 	@python .makesetup.py
+
+pypitest: setup.py
+	$(python) $< register -r pypitest
+	$(python) $< sdist upload -r pypitest
+
+pypilive: setup.py
+	$(python) $< register -r pypi
+	$(python) $< sdist upload -r pypi
 
 install: setup.py
 	$(python) $< $@
